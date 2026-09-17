@@ -183,11 +183,16 @@ body {
   margin-bottom: 0.85rem;
 }
 .hero-title {
-  font-size: clamp(2.3rem, 3.8vw, 3.6rem);
+  font-size: clamp(1.85rem, 2.9vw, 3rem);
   font-weight: 700; 
-  line-height: 1.18;
+  line-height: 1.22;
   margin-bottom: 0.85rem;
   color: var(--hero-text-white); 
+}
+.hero-title .text-nowrap,
+.text-nowrap {
+  white-space: nowrap !important;
+  display: inline-block;
 }
 .hero-subtitle {
   font-size: clamp(1.2rem, 1.8vw, 1.6rem);
@@ -935,7 +940,7 @@ body {
     display: inline-block;
   }
   .hero-title {
-    font-size: 1.42rem;
+    font-size: clamp(1.2rem, 4.4vw, 1.38rem);
     line-height: 1.25;
     margin-bottom: 0.4rem;
   }

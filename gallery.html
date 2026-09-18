@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photo Gallery | Islamabad Model College for Boys G-10/4</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  
+  <!-- Google Fonts (Poppins) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- External CSS -->
+  <link rel="stylesheet" href="index.css">
+
+  <style>
+    /* Dedicated Gallery Page Styles */
+    .gallery-filter-btn {
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: 30px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .gallery-filter-btn:hover,
+    .gallery-filter-btn.active {
+      background: var(--primary-navy);
+      color: #ffffff;
+      border-color: var(--primary-navy);
+      box-shadow: 0 4px 14px rgba(19, 60, 102, 0.2);
+    }
+
+    .gallery-card {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+      cursor: pointer;
+      height: 100%;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 32px rgba(19, 60, 102, 0.15);
+      border-color: var(--primary-navy);
+    }
+
+    .gallery-img-container {
+      position: relative;
+      overflow: hidden;
+      background: #0f172a;
+    }
+
+    .gallery-img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-card:hover .gallery-img {
+      transform: scale(1.06);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10, 25, 47, 0.85) 100%);
+      opacity: 0.85;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.25rem;
+      color: #ffffff;
+    }
+
+    .gallery-card:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    .gallery-zoom-icon {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--primary-navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.3s ease;
+    }
+
+    .gallery-card:hover .gallery-zoom-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .gallery-info-body {
+      padding: 1rem 1.25rem;
+    }
+
+    /* Modal Image Lightbox */
+    .lightbox-modal .modal-content {
+      background: transparent;
+      border: none;
+    }
+
+    .lightbox-modal .modal-body {
+      padding: 0;
+      position: relative;
+    }
+
+    .lightbox-modal-img {
+      width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .lightbox-caption {
+      background: rgba(10, 25, 47, 0.9);
+      color: #fff;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar py-2 text-center">
+    <div class="container-fluid px-3 px-lg-4 px-xl-5 d-flex justify-content-center align-items-center flex-wrap gap-2">
+      <i class="bi bi-megaphone"></i>
+      <span>Admissions Open for Intermediate Classes (<b>F.Sc</b>) - Academic Session 2026–27</span>
+      <span class="mx-1 d-none d-md-inline">|</span>
+      <a href="index.html#admissions">View Details &rarr;</a>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top px-2 px-lg-3 px-xl-5">
+    <div class="container-fluid px-0">
+      <!-- Brand Logo + Name -->
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="logo2.webp" alt="IMCB Logo" class="navbar-brand-logo">
+        <div class="d-none d-md-block">
+          <div class="college-title">Islamabad Model College<br>for Boys</div>
+          <div class="college-sub">G-10/4, Islamabad</div>
+        </div>
+        <div class="d-md-none">
+          <div class="college-title">IMCB G-10/4</div>
+        </div>
+      </a>
+
+      <!-- Mobile Toggle Button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Nav Links -->
+      <div class="collapse navbar-collapse justify-content-between" id="mainNavbar">
+        <ul class="navbar-nav flex-grow-1 justify-content-evenly mx-lg-2 mx-xl-4 mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">About</a>
+            <ul class="dropdown-menu border-0 shadow-sm">
+              <li><a class="dropdown-item" href="overview.html">Overview</a></li>
+              <li><a class="dropdown-item" href="index.html#principal">Principal's Message</a></li>
+              <li><a class="dropdown-item" href="teachers.html">Faculty</a></li>
+              <li><a class="dropdown-item" href="student-council.html">Student Council</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Academics</a>
+            <ul class="dropdown-menu border-0 shadow-sm">
+              <li><a class="dropdown-item" href="overview.html#academics">F.Sc Pre-Medical</a></li>
+              <li><a class="dropdown-item" href="overview.html#academics">F.Sc Pre-Engineering</a></li>
+              <li><a class="dropdown-item" href="overview.html#academics">ICS</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Admissions</a>
+            <ul class="dropdown-menu border-0 shadow-sm">
+              <li><a class="dropdown-item" href="index.html#admissions">Eligibility Criteria</a></li>
+              <li><a class="dropdown-item" href="overview.html#admissions-finance">Fee Structure</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="index.html#notices">Notices</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#events">Events</a></li>
+          <li class="nav-item"><a class="nav-link active" href="gallery.html">Gallery</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#downloads">Downloads</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+
+        <!-- Right Admissions CTA Button -->
+        <a href="index.html#admissions" class="btn btn-admit-nav d-flex align-items-center gap-2 mt-3 mt-lg-0 text-nowrap">
+          <i class="bi bi-mortarboard-fill"></i> Admissions
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <section class="overview-hero">
+    <div class="container text-center text-lg-start">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-3" style="font-size: 0.85rem;">
+              <li class="breadcrumb-item"><a href="index.html" class="text-warning text-decoration-none"><i class="bi bi-house-door-fill me-1"></i>Home</a></li>
+              <li class="breadcrumb-item active text-white" aria-current="page">Photo Gallery</li>
+            </ol>
+          </nav>
+          <div class="d-inline-flex align-items-center gap-2 mb-2 px-3 py-1 rounded-pill" style="background: rgba(255, 193, 7, 0.2); border: 1px solid rgba(255, 193, 7, 0.4); color: #ffc107; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;">
+            <i class="bi bi-camera-fill"></i> VISUAL ARCHIVE & MEMORIES
+          </div>
+          <h1 class="display-5 fw-bold mb-2 text-white">Campus Photo Gallery</h1>
+          <p class="lead mb-0 text-white-50" style="max-width: 680px;">
+            Explore the vibrant campus life, historic infrastructure, student leadership, sports events, and prestigious memories of IMCB G-10/4.
+          </p>
+        </div>
+        <div class="col-lg-4 text-center d-none d-lg-block">
+          <img src="logo2.webp" alt="IMCB Crest" style="width: 150px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Container -->
+  <div class="container my-5">
+
+    <!-- Category Filter Tabs -->
+    <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
+      <button class="gallery-filter-btn active" data-filter="all">
+        <i class="bi bi-grid-fill me-1"></i> All Photos
+      </button>
+      <button class="gallery-filter-btn" data-filter="campus">
+        <i class="bi bi-building me-1"></i> Campus & Heritage
+      </button>
+      <button class="gallery-filter-btn" data-filter="sports">
+        <i class="bi bi-trophy-fill me-1"></i> Sports & Ground
+      </button>
+      <button class="gallery-filter-btn" data-filter="students">
+        <i class="bi bi-people-fill me-1"></i> Student Council
+      </button>
+      <button class="gallery-filter-btn" data-filter="faculty">
+        <i class="bi bi-award me-1"></i> Leadership & Logo
+      </button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="row g-4" id="galleryGrid">
+
+      <!-- Photo 1: Front Entrance Gate Panoramic -->
+      <div class="col-md-6 col-lg-4 gallery-item" data-category="campus">
+        <div class="gallery-card" onclick="openLightbox('slide1_wide.webp', 'College Main Entrance Gate', 'Front view of Islamabad Model College for Boys G-10/4 featuring the historic main gate, administrative signboards, and campus facade.')">
+          <div class="gallery-img-container">
+            <img src="slide1_wide.webp" alt="College Main Entrance Gate" class="gallery-img">
+            <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
+            <div class="gallery-overlay">
+              <div>
+                <span class="badge bg-warning text-dark small fw-bold mb-1">Campus</span>
+                <h6 class="fw-bold mb-0 text-white">Main Entrance & Gate</h6>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info-body">
+            <h6 class="fw-bold text-navy mb-1">Main Entrance & Signboard</h6>
+            <p class="small text-muted mb-0">Front entry of IMCB G-10/4 with Pakistani national flag and official college signage.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo 2: Courtyard & Garden Panoramic -->
+      <div class="col-md-6 col-lg-4 gallery-item" data-category="campus">
+        <div class="gallery-card" onclick="openLightbox('slide2_wide.webp', 'Lush Campus Courtyard & Garden', 'Panoramic view of the central green courtyard lined with tall pine trees, palm trees, and seasonal flower beds.')">
+          <div class="gallery-img-container">
+            <img src="slide2_wide.webp" alt="Campus Courtyard & Garden" class="gallery-img">
+            <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
+            <div class="gallery-overlay">
+              <div>
+                <span class="badge bg-success small fw-bold mb-1">Campus</span>
+                <h6 class="fw-bold mb-0 text-white">Central Courtyard</h6>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info-body">
+            <h6 class="fw-bold text-navy mb-1">Lush Green Courtyard</h6>
+            <p class="small text-muted mb-0">Panoramic landscape view of the college courtyard and surrounding academic corridors.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo 3: Campus Heritage Building -->
+      <div class="col-md-6 col-lg-4 gallery-item" data-category="campus">
+        <div class="gallery-card" onclick="openLightbox('colleges3.webp', 'Academic Block & Heritage Building', 'Traditional brick facade and corridors of IMCB G-10/4 serving intermediate and secondary school classes since 1987.')">
+          <div class="gallery-img-container">
+            <img src="colleges3.webp" alt="Academic Block Building" class="gallery-img">
+            <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
+            <div class="gallery-overlay">
+              <div>
+                <span class="badge bg-primary small fw-bold mb-1">Architecture</span>
+                <h6 class="fw-bold mb-0 text-white">Main Academic Block</h6>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info-body">
+            <h6 class="fw-bold text-navy mb-1">Academic Block & Corridors</h6>
+            <p class="small text-muted mb-0">Iconic red-brick architectural building housing science labs, classrooms, and offices.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo 4: Sports Ground & Campus Life -->
+      <div class="col-md-6 col-lg-4 gallery-item" data-category="sports">
+        <div class="gallery-card" onclick="openLightbox('collegepic.webp', 'Sports Grounds & Physical Activities', 'Students participating in sporting activities and morning assembly on the expansive outdoor athletic grounds.')">
+          <div class="gallery-img-container">
+            <img src="collegepic.webp" alt="Sports Grounds IMCB" class="gallery-img">
+            <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
+            <div class="gallery-overlay">
+              <div>
+                <span class="badge bg-danger small fw-bold mb-1">Sports</span>
+                <h6 class="fw-bold mb-0 text-white">Athletics & Grounds</h6>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info-body">
+            <h6 class="fw-bold text-navy mb-1">Sports Grounds & Outdoor Fitness</h6>
+            <p class="small text-muted mb-0">Vibrant athletic fields supporting cricket tournaments, football leagues, and annual sports galas.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo 5: Student Council Panoramic Banner -->
+      <div class="col-md-6 col-lg-4 gallery-item" data-category="students">
+        <div class="gallery-card" onclick="openLightbox('slide4_wide.webp', 'Student Council Leadership Batch', 'Wide panoramic capture of the official IMCB G-10/4 student prefects, discipline incharge, and house captains.')">
+          <div class="gallery-img-container">
+            <img src="slide4_wide.webp" alt="Student Council Wide" class="gallery-img">
+            <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
+            <div class="gallery-overlay">
+              <div>
+                <span class="badge bg-warning text-dark small fw-bold mb-1">Leadership</span>
+                <h6 class="fw-bold mb-0 text-white">Prefectorial Board Banner</h6>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info-body">
+            <h6 class="fw-bold text-navy mb-1">Student Council Panorama</h6>
+            <p class="small text-muted mb-0">Official Student Council cabinet representing student governance and leadership duties.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo 6: Student Council Batch Close-up -->
+      <div class="col-md-6 col-lg-4 gallery-item" data-category="students">
+        <div class="gallery-card" onclick="openLightbox('Council.webp', 'Student Council & Prefectorial Board', 'High resolution portrait of the college student council leaders dressed in official uniform and ties.')">
+          <div class="gallery-img-container">
+            <img src="Council.webp" alt="Student Council Batch" class="gallery-img">
+            <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
+            <div class="gallery-overlay">
+              <div>
+                <span class="badge bg-info small fw-bold mb-1">Council</span>
+                <h6 class="fw-bold mb-0 text-white">Cabinet Batch Photo</h6>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info-body">
+            <h6 class="fw-bold text-navy mb-1">Cabinet Batch Group</h6>
+            <p class="small text-muted mb-0">Elected Head Boy, Deputy Head Boy, Proctors, and House Captains of the college.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo 7: Campus Facade (Overview Hero) -->
+      <div class="col-md-6 col-lg-4 gallery-item" data-category="campus">
+        <div class="gallery-card" onclick="openLightbox('college3.webp', 'IMCB G-10/4 Campus Facade', 'Front entrance structure with college signage, established under Federal Directorate of Education Islamabad.')">
+          <div class="gallery-img-container">
+            <img src="college3.webp" alt="College Campus Facade" class="gallery-img">
+            <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
+            <div class="gallery-overlay">
+              <div>
+                <span class="badge bg-secondary small fw-bold mb-1">Campus</span>
+                <h6 class="fw-bold mb-0 text-white">Front Gate Sign</h6>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info-body">
+            <h6 class="fw-bold text-navy mb-1">Campus Entry Gate</h6>
+            <p class="small text-muted mb-0">Entrance gate showing college title and founder principal historical text.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo 8: Principal Prof. Ihsaan Ul Haq -->
+      <div class="col-md-6 col-lg-4 gallery-item" data-category="faculty">
+        <div class="gallery-card" onclick="openLightbox('principle.webp', 'Prof. Ihsaan Ul Haq - Principal IMCB G-10/4', 'Principal of Islamabad Model College for Boys G-10/4 leading institutional vision, discipline, and academic progress.')">
+          <div class="gallery-img-container" style="background: #e2e8f0;">
+            <img src="principle.webp" alt="Principal IMCB G-10/4" class="gallery-img" style="object-position: top;">
+            <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
+            <div class="gallery-overlay">
+              <div>
+                <span class="badge bg-primary small fw-bold mb-1">Principal</span>
+                <h6 class="fw-bold mb-0 text-white">Prof. Ihsaan Ul Haq</h6>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info-body">
+            <h6 class="fw-bold text-navy mb-1">Principal's Portrait</h6>
+            <p class="small text-muted mb-0">Official portrait of Principal Prof. Ihsaan Ul Haq presiding over college administration.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo 9: Official College Crest -->
+      <div class="col-md-6 col-lg-4 gallery-item" data-category="faculty">
+        <div class="gallery-card" onclick="openLightbox('logo2.webp', 'Official College Crest & Emblem', 'The official emblem of Islamabad Model College for Boys G-10/4, featuring the motto Leading to Progress and Excellence.')">
+          <div class="gallery-img-container d-flex align-items-center justify-content-center" style="background: #0a192f; height: 260px;">
+            <img src="logo2.webp" alt="Official College Emblem" style="max-height: 200px; width: auto; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));">
+            <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
+            <div class="gallery-overlay">
+              <div>
+                <span class="badge bg-warning text-dark small fw-bold mb-1">Emblem</span>
+                <h6 class="fw-bold mb-0 text-white">College Insignia</h6>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info-body">
+            <h6 class="fw-bold text-navy mb-1">College Official Insignia</h6>
+            <p class="small text-muted mb-0">Official emblem embodying knowledge, character, and institutional tradition.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Actions Callout -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 p-4 bg-white rounded-4 shadow-sm border my-5">
+      <div>
+        <h5 class="fw-bold text-navy mb-1">Want to Experience Our Campus in Person?</h5>
+        <p class="small text-muted mb-0">Admissions are open for academic session 2026–27. Visit our admissions branch or get in touch.</p>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="overview.html" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left"></i> Overview
+        </a>
+        <a href="contact.html" class="btn btn-admit-nav">
+          <i class="bi bi-envelope-fill"></i> Contact Us
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div class="modal fade lightbox-modal" id="lightboxModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-body text-center position-relative">
+          <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 z-3" data-bs-dismiss="modal" aria-label="Close"></button>
+          <img id="lightboxImg" src="" alt="Enlarged preview" class="lightbox-modal-img">
+          <div class="lightbox-caption text-start">
+            <h5 id="lightboxTitle" class="fw-bold mb-1 text-white"></h5>
+            <p id="lightboxDesc" class="small text-white-50 mb-0"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="py-4 text-center text-white" style="background-color: var(--primary-navy); border-top: 1px solid rgba(255,255,255,0.1);">
+    <div class="container">
+      <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 small">
+        <div class="text-white-50">© 2026 Islamabad Model College for Boys (IMCB) G-10/4, Islamabad. All rights reserved.</div>
+        <div class="d-flex gap-3">
+          <a href="index.html" class="text-white-50 text-decoration-none">Home</a>
+          <span class="text-white-50">|</span>
+          <a href="overview.html" class="text-white-50 text-decoration-none">Overview</a>
+          <span class="text-white-50">|</span>
+          <a href="teachers.html" class="text-white-50 text-decoration-none">Teachers</a>
+          <span class="text-white-50">|</span>
+          <a href="gallery.html" class="text-warning text-decoration-none">Gallery</a>
+          <span class="text-white-50">|</span>
+          <a href="contact.html" class="text-white-50 text-decoration-none">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Interactive Filter & Lightbox Script -->
+  <script>
+    // Category Filtering
+    const filterBtns = document.querySelectorAll('.gallery-filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.getAttribute('data-filter');
+
+        galleryItems.forEach(item => {
+          if (filter === 'all' || item.getAttribute('data-category') === filter) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Lightbox Modal
+    const lightboxModal = new bootstrap.Modal(document.getElementById('lightboxModal'));
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxDesc = document.getElementById('lightboxDesc');
+
+    function openLightbox(src, title, desc) {
+      lightboxImg.src = src;
+      lightboxTitle.innerText = title;
+      lightboxDesc.innerText = desc;
+      lightboxModal.show();
+    }
+  </script>
+
+</body>
+</html>

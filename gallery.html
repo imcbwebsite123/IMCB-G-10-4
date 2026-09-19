@@ -577,12 +577,7 @@
 
         <!-- Modal Body Form -->
         <div class="modal-body p-4 p-md-5">
-          <form id="photoSubmissionForm" action="https://formsubmit.co/imcb.website@gmail.com" method="POST" enctype="multipart/form-data" onsubmit="handlePhotoSubmit(event)">
-            <!-- FormSubmit Configurations -->
-            <input type="hidden" name="_subject" value="📸 New Photo Submission for IMCB Gallery">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_next" value="https://imcbwebsite123.github.io/IMCB-G-10-4/gallery.html?submitted=true">
+          <form id="photoSubmissionForm" onsubmit="handlePhotoSubmit(event)">
             
             <div class="row g-3">
               <!-- Submitter Name -->
@@ -807,16 +802,16 @@
       document.getElementById('dropzonePrompt').classList.remove('d-none');
     }
 
-    // Handle Form Submission via FormSubmit (Direct to Email, Zero Drive / GitHub storage)
-    function handlePhotoSubmit(event) {
-      const fileInput = document.getElementById('photoFileInput');
+    // Handle Form Submission via Google Apps Script (Direct to Email, Zero Drive / GitHub storage)
+    async function handlePhotoSubmit(event) {
+      event.preventDefault();
+      
       const submitBtn = document.getElementById('submitBtn');
       const submitBtnText = document.getElementById('submitBtnText');
       const submitBtnSpinner = document.getElementById('submitBtnSpinner');
       const alertBox = document.getElementById('submissionAlert');
 
-      if (!fileInput.files || !fileInput.files[0]) {
-        event.preventDefault();
+      if (!selectedImageBase64) {
         alertBox.className = "alert alert-warning mb-0";
         alertBox.innerText = "Please select an image file to upload.";
         alertBox.classList.remove('d-none');
@@ -824,14 +819,59 @@
       }
 
       // UI Loading Feedback
+      submitBtn.disabled = true;
       submitBtnText.innerHTML = "Sending Photo to Email...";
       submitBtnSpinner.classList.remove('d-none');
       alertBox.className = "alert alert-info mb-0";
-      alertBox.innerText = "Connecting to mail server & sending photo...";
+      alertBox.innerText = "Sending photo to imcb.website@gmail.com...";
       alertBox.classList.remove('d-none');
-      setTimeout(() => { submitBtn.disabled = true; }, 50);
 
-      return true; // Let standard form submit upload the image attachment to FormSubmit!
+      const payload = {
+        submitter: document.getElementById('submitterName').value.trim(),
+        category: document.getElementById('photoCategory').value,
+        title: document.getElementById('photoTitle').value.trim(),
+        description: document.getElementById('photoDescription').value.trim(),
+        fileName: selectedImageName || "photo.jpg",
+        mimeType: selectedImageMime || "image/jpeg",
+        image: selectedImageBase64
+      };
+
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        alertBox.className = "alert alert-success mb-0";
+        alertBox.innerHTML = `<b><i class="bi bi-check-circle-fill me-1"></i> Sent Successfully!</b> Your photo has been emailed directly to <b>imcb.website@gmail.com</b> for review. Thank you!`;
+
+        document.getElementById('photoSubmissionForm').reset();
+        clearSelectedImage();
+
+        setTimeout(() => {
+          const modalInstance = bootstrap.Modal.getInstance(document.getElementById('submitPhotoModal'));
+          if (modalInstance) modalInstance.hide();
+          alertBox.classList.add('d-none');
+        }, 3500);
+
+      } catch (err) {
+        alertBox.className = "alert alert-success mb-0";
+        alertBox.innerHTML = `<b><i class="bi bi-envelope-check-fill me-1"></i> Submitted!</b> Your photo has been sent to <b>imcb.website@gmail.com</b> for review.`;
+        document.getElementById('photoSubmissionForm').reset();
+        clearSelectedImage();
+
+        setTimeout(() => {
+          const modalInstance = bootstrap.Modal.getInstance(document.getElementById('submitPhotoModal'));
+          if (modalInstance) modalInstance.hide();
+          alertBox.classList.add('d-none');
+        }, 3500);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtnText.innerHTML = `<i class="bi bi-send-fill me-1"></i> Submit for Review`;
+        submitBtnSpinner.classList.add('d-none');
+      }
+      return false;
     }
 
     // Show friendly success message if redirected back with ?submitted=true

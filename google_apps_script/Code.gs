@@ -1,30 +1,35 @@
 /**
  * =====================================================================
- * IMCB G-10/4 PHOTO GALLERY - SUBMISSION & APPROVAL BACKEND
+ * IMCB G-10/4 PHOTO GALLERY - GITHUB BACKEND (ZERO GOOGLE DRIVE STORAGE)
  * =====================================================================
  * Administrator: imcb.website@gmail.com
- * Handles:
- * 1. Visitor photo submissions (Base64 -> Google Drive)
- * 2. Database logging in Google Sheets
- * 3. HTML email sent to Administrator with [Approve] & [Reject] buttons
- * 4. One-click URL approval / rejection
- * 5. Public API to serve approved photos to gallery.html
+ * Repository: imcbwebsite123/IMCB-G-10-4
+ * 
+ * Features:
+ * 1. Photos are saved DIRECTLY to GitHub repo (images/community/).
+ * 2. GOOGLE DRIVE IS NEVER USED. 0 MB Drive storage used!
+ * 3. Review email sent to imcb.website@gmail.com with one-click Approve / Reject.
+ * 4. On Approve: Status marked 'Approved', instantly shows in gallery.
+ * 5. On Reject: Photo file is automatically deleted from GitHub repository!
+ * 6. To remove an approved photo anytime: change Status in Google Sheet from 'Approved' to 'Rejected'.
  * =====================================================================
  */
 
 const ADMIN_EMAIL = "imcb.website@gmail.com";
-const FOLDER_NAME = "IMCB_Gallery_Submissions";
+const GITHUB_REPO = "imcbwebsite123/IMCB-G-10-4";
+const GITHUB_TOKEN = PropertiesService.getScriptProperties().getProperty("GITHUB_TOKEN") || "PASTE_YOUR_GITHUB_TOKEN_HERE";
+const GITHUB_BRANCH = "main";
 const SHEET_NAME = "IMCB_Gallery_Database";
 
 /**
  * Handle GET requests:
  * - action=getApproved : Return JSON array of approved photos for website
- * - action=approve&id=... : Approve a submission from email
- * - action=reject&id=... : Reject a submission from email
+ * - action=approve&id=... : Approve submission from email
+ * - action=reject&id=... : Reject and delete photo from GitHub
  */
 function doGet(e) {
-  const action = e.parameter.action;
-  const id = e.parameter.id;
+  const action = e.parameter ? e.parameter.action : "";
+  const id = e.parameter ? e.parameter.id : "";
   
   if (action === "getApproved") {
     return handleGetApproved();
@@ -33,8 +38,10 @@ function doGet(e) {
   } else if (action === "reject" && id) {
     return handleApproval(id, "Rejected");
   } else {
-    return ContentService.createTextOutput(JSON.stringify({ status: "ok", message: "IMCB Gallery API is active." }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "ok",
+      message: "IMCB Gallery GitHub API is active (Zero Drive storage mode)."
+    })).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
@@ -49,30 +56,65 @@ function doPost(e) {
     const title = data.title || "Campus Photo";
     const category = data.category || "campus";
     const description = data.description || "";
-    const base64Data = data.image; // Base64 data string
-    const fileName = data.fileName || "submission.jpg";
-    const mimeType = data.mimeType || "image/jpeg";
+    let base64Data = data.image || "";
+    const rawFileName = data.fileName || "photo.jpg";
     
     if (!base64Data) {
       return jsonResponse({ success: false, message: "No image data received" });
     }
     
-    // 1. Save photo to Google Drive
-    const folder = getOrCreateFolder(FOLDER_NAME);
-    const decodedBytes = Utilities.base64Decode(base64Data.split(',')[1] || base64Data);
-    const blob = Utilities.newBlob(decodedBytes, mimeType, fileName);
-    const file = folder.createFile(blob);
-    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-    const fileId = file.getId();
+    // Strip Base64 header prefix if present (e.g. data:image/jpeg;base64,)
+    if (base64Data.indexOf(",") > -1) {
+      base64Data = base64Data.split(",")[1];
+    }
     
-    // Direct viewable URL for Google Drive files
-    const imageUrl = "https://lh3.googleusercontent.com/d/" + fileId;
+    // Clean extension
+    let ext = "jpg";
+    if (rawFileName.toLowerCase().endsWith(".png")) ext = "png";
+    else if (rawFileName.toLowerCase().endsWith(".webp")) ext = "webp";
     
-    // 2. Generate unique Submission ID
-    const submissionId = "SUB-" + Utilities.formatDate(new Date(), "GMT+5", "yyyyMMdd-HHmmss") + "-" + Math.floor(Math.random() * 1000);
+    // 1. Generate unique Submission ID & Filename
+    const idSuffix = Utilities.formatDate(new Date(), "GMT+5", "yyyyMMdd-HHmmss") + "-" + Math.floor(Math.random() * 1000);
+    const submissionId = "SUB-" + idSuffix;
+    const gitFileName = "photo_" + idSuffix + "." + ext;
+    const gitFilePath = "images/community/" + gitFileName;
     const timestamp = Utilities.formatDate(new Date(), "GMT+5", "dd MMM yyyy, hh:mm a");
     
-    // 3. Save entry to Google Sheet
+    // 2. Upload file directly to GitHub Repository (Zero Google Drive storage!)
+    const ghUploadUrl = "https://api.github.com/repos/" + GITHUB_REPO + "/contents/" + gitFilePath;
+    const ghPayload = {
+      message: "Upload community photo submission: " + title + " (" + submissionId + ")",
+      content: base64Data,
+      branch: GITHUB_BRANCH
+    };
+    
+    const ghResponse = UrlFetchApp.fetch(ghUploadUrl, {
+      method: "put",
+      headers: {
+        "Authorization": "token " + GITHUB_TOKEN,
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "IMCB-Gallery-App"
+      },
+      contentType: "application/json",
+      payload: JSON.stringify(ghPayload),
+      muteHttpExceptions: true
+    });
+    
+    const ghResCode = ghResponse.getResponseCode();
+    if (ghResCode !== 200 && ghResCode !== 201) {
+      return jsonResponse({
+        success: false,
+        message: "GitHub upload failed (HTTP " + ghResCode + "): " + ghResponse.getContentText()
+      });
+    }
+    
+    const ghData = JSON.parse(ghResponse.getContentText());
+    const fileSha = ghData.content ? ghData.content.sha : "";
+    
+    // High-speed direct raw URL from GitHub
+    const imageUrl = "https://raw.githubusercontent.com/" + GITHUB_REPO + "/" + GITHUB_BRANCH + "/" + gitFilePath;
+    
+    // 3. Save entry to Google Sheet (Free database, 0 MB Drive storage used)
     const sheet = getOrCreateSheet(SHEET_NAME);
     sheet.appendRow([
       submissionId,
@@ -81,12 +123,13 @@ function doPost(e) {
       category,
       title,
       description,
-      fileId,
+      gitFilePath,
       imageUrl,
-      "Pending"
+      "Pending",
+      fileSha
     ]);
     
-    // 4. Send Review Email to Admin with Approve / Reject buttons
+    // 4. Send Review Email to Admin with One-Click Approve / Reject
     const scriptUrl = ScriptApp.getService().getUrl();
     const approveUrl = scriptUrl + "?action=approve&id=" + encodeURIComponent(submissionId);
     const rejectUrl = scriptUrl + "?action=reject&id=" + encodeURIComponent(submissionId);
@@ -105,7 +148,7 @@ function doPost(e) {
     
     return jsonResponse({
       success: true,
-      message: "Photo submitted successfully and sent for approval."
+      message: "Photo submitted successfully to GitHub and sent for admin review."
     });
     
   } catch (err) {
@@ -117,36 +160,57 @@ function doPost(e) {
 }
 
 /**
- * Update submission status (Approve / Reject) and return styled HTML page for Admin
+ * Handle Approval or Rejection
  */
 function handleApproval(id, newStatus) {
   const sheet = getOrCreateSheet(SHEET_NAME);
   const data = sheet.getDataRange().getValues();
-  let found = false;
+  let foundRow = -1;
   let photoTitle = "";
   let submitter = "";
   let category = "";
+  let gitFilePath = "";
   let imageUrl = "";
+  let currentSha = "";
   
   for (let i = 1; i < data.length; i++) {
     if (data[i][0] === id) {
-      sheet.getRange(i + 1, 9).setValue(newStatus);
+      foundRow = i + 1;
       photoTitle = data[i][4];
       submitter = data[i][2];
       category = data[i][3];
+      gitFilePath = data[i][6];
       imageUrl = data[i][7];
-      found = true;
+      currentSha = data[i][9];
       break;
     }
   }
   
+  if (foundRow === -1) {
+    return HtmlService.createHtmlOutput("<h2 style='font-family:sans-serif;color:#ef4444;'>Submission ID not found.</h2>")
+      .setTitle("Not Found");
+  }
+  
   const isApproved = (newStatus === "Approved");
+  
+  if (isApproved) {
+    // Update status in sheet to Approved
+    sheet.getRange(foundRow, 9).setValue("Approved");
+  } else {
+    // Rejected: Delete file from GitHub repository
+    sheet.getRange(foundRow, 9).setValue("Rejected");
+    
+    if (gitFilePath) {
+      deleteGitHubFile(gitFilePath, currentSha);
+    }
+  }
+  
   const color = isApproved ? "#10b981" : "#ef4444";
   const icon = isApproved ? "✅" : "❌";
-  const titleText = isApproved ? "Photo Approved & Published!" : "Photo Rejected";
+  const titleText = isApproved ? "Photo Approved & Published!" : "Photo Rejected & Deleted";
   const descText = isApproved 
-    ? "This photo has been approved and is now live in the IMCB G-10/4 Photo Gallery for all visitors." 
-    : "This photo has been rejected and will not be displayed on the website.";
+    ? "This photo has been approved and is now LIVE on GitHub Pages in the IMCB G-10/4 Photo Gallery." 
+    : "This photo has been rejected and permanently erased from the GitHub repository. It will not be shown.";
     
   const htmlOutput = `
     <!DOCTYPE html>
@@ -164,6 +228,7 @@ function handleApproval(id, newStatus) {
         p { color: #64748b; font-size: 0.95rem; line-height: 1.6; margin: 0 0 24px; }
         .preview-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 14px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
         .badge { display: inline-block; padding: 6px 16px; border-radius: 30px; background: #f8fafc; border: 1px solid #e2e8f0; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 24px; }
+        .storage-note { background: #ecfdf5; color: #065f46; padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; margin-bottom: 20px; }
         .btn-gallery { display: inline-block; background: #0a192f; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 12px; font-weight: 600; font-size: 0.95rem; transition: background 0.2s; }
         .btn-gallery:hover { background: #133c66; }
       </style>
@@ -172,8 +237,9 @@ function handleApproval(id, newStatus) {
       <div class="card">
         <div class="icon-circle">${icon}</div>
         <h1>${titleText}</h1>
+        <div class="storage-note">⚡ Zero Google Drive Storage Used — Hosted Directly on GitHub</div>
         <p>${descText}</p>
-        ${imageUrl ? `<img src="${imageUrl}" class="preview-img" alt="Photo preview">` : ''}
+        ${isApproved && imageUrl ? `<img src="${imageUrl}" class="preview-img" alt="Photo preview">` : ''}
         <div class="badge">Title: <b>${escapeHtml(photoTitle)}</b> | Submitter: <b>${escapeHtml(submitter)}</b></div>
         <div>
           <a href="https://imcbwebsite123.github.io/IMCB-G-10-4/gallery.html" class="btn-gallery" target="_blank">View Live Gallery &rarr;</a>
@@ -187,6 +253,49 @@ function handleApproval(id, newStatus) {
 }
 
 /**
+ * Delete file from GitHub via GitHub REST API
+ */
+function deleteGitHubFile(filePath, sha) {
+  try {
+    let fileSha = sha;
+    // If SHA not cached in sheet, fetch it from GitHub
+    if (!fileSha) {
+      const getRes = UrlFetchApp.fetch("https://api.github.com/repos/" + GITHUB_REPO + "/contents/" + filePath, {
+        headers: {
+          "Authorization": "token " + GITHUB_TOKEN,
+          "Accept": "application/vnd.github+json",
+          "User-Agent": "IMCB-Gallery-App"
+        },
+        muteHttpExceptions: true
+      });
+      if (getRes.getResponseCode() === 200) {
+        fileSha = JSON.parse(getRes.getContentText()).sha;
+      }
+    }
+    
+    if (fileSha) {
+      UrlFetchApp.fetch("https://api.github.com/repos/" + GITHUB_REPO + "/contents/" + filePath, {
+        method: "delete",
+        headers: {
+          "Authorization": "token " + GITHUB_TOKEN,
+          "Accept": "application/vnd.github+json",
+          "User-Agent": "IMCB-Gallery-App"
+        },
+        contentType: "application/json",
+        payload: JSON.stringify({
+          message: "Delete rejected photo: " + filePath,
+          sha: fileSha,
+          branch: GITHUB_BRANCH
+        }),
+        muteHttpExceptions: true
+      });
+    }
+  } catch (err) {
+    Logger.log("Error deleting file from GitHub: " + err.toString());
+  }
+}
+
+/**
  * Return JSON of all Approved photos
  */
 function handleGetApproved() {
@@ -194,7 +303,6 @@ function handleGetApproved() {
   const data = sheet.getDataRange().getValues();
   const approvedList = [];
   
-  // Skip header row (index 0)
   for (let i = 1; i < data.length; i++) {
     const row = data[i];
     const status = row[8];
@@ -222,7 +330,7 @@ function handleGetApproved() {
 }
 
 /**
- * Send Review Email to imcb.website@gmail.com
+ * Send Review Email to Administrator
  */
 function sendAdminReviewEmail(adminEmail, info) {
   const subject = "📸 New Gallery Photo: \"" + info.title + "\" (Review Required)";
@@ -241,7 +349,7 @@ function sendAdminReviewEmail(adminEmail, info) {
         <div style="padding: 25px;">
           <p style="font-size: 15px; color: #334155; margin-top: 0;">Assalam-o-Alaikum Administrator,</p>
           <p style="font-size: 14px; color: #475569; line-height: 1.6;">
-            A new photo has been submitted for the website gallery. Please review the details and photo below to approve or reject:
+            A new photo has been submitted for the website gallery. Google Drive is <b>NOT</b> used (Zero Drive storage). Photo is hosted directly in GitHub:
           </p>
           
           <!-- Image Preview -->
@@ -268,8 +376,12 @@ function sendAdminReviewEmail(adminEmail, info) {
               <td style="padding: 8px 12px; color: #475569;">${info.description ? escapeHtml(info.description) : '<i>None provided</i>'}</td>
             </tr>
             <tr>
-              <td style="padding: 8px 12px; background: #f1f5f9; font-weight: bold; color: #334155;">Submitted At:</td>
-              <td style="padding: 8px 12px; background: #f8fafc; color: #64748b;">${info.timestamp}</td>
+              <td style="padding: 8px 12px; background: #f1f5f9; font-weight: bold; color: #334155;">Storage:</td>
+              <td style="padding: 8px 12px; background: #f8fafc; color: #10b981; font-weight: bold;">GitHub Repository (0 MB Drive storage)</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 12px; font-weight: bold; color: #334155;">Submitted At:</td>
+              <td style="padding: 8px 12px; color: #64748b;">${info.timestamp}</td>
             </tr>
           </table>
           
@@ -279,18 +391,18 @@ function sendAdminReviewEmail(adminEmail, info) {
               ✅ APPROVE & PUBLISH
             </a>
             <a href="${info.rejectUrl}" style="background-color: #ef4444; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 15px; display: inline-block; margin: 0 8px 10px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);">
-              ❌ REJECT / DISCARD
+              ❌ REJECT & DELETE
             </a>
           </div>
           
           <p style="font-size: 12px; color: #94a3b8; text-align: center; margin-top: 25px;">
-            Note: Clicking Approve will instantly publish this photo to the live gallery on GitHub Pages without requiring any coding.
+            Note: Clicking Approve publishes this photo to the live gallery. Clicking Reject will delete it from GitHub automatically.
           </p>
         </div>
         
         <!-- Footer -->
         <div style="background-color: #f1f5f9; padding: 15px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0;">
-          © 2026 Islamabad Model College for Boys G-10/4 | Automated Gallery Notification System
+          © 2026 Islamabad Model College for Boys G-10/4 | GitHub Automated Gallery System
         </div>
       </div>
     </div>
@@ -299,17 +411,6 @@ function sendAdminReviewEmail(adminEmail, info) {
   GmailApp.sendEmail(adminEmail, subject, "New photo submission review required: " + info.title, {
     htmlBody: htmlBody
   });
-}
-
-/**
- * Utility: Helpers for Drive Folder & Sheet
- */
-function getOrCreateFolder(name) {
-  const folders = DriveApp.getFoldersByName(name);
-  if (folders.hasNext()) {
-    return folders.next();
-  }
-  return DriveApp.createFolder(name);
 }
 
 function getOrCreateSheet(name) {
@@ -327,11 +428,12 @@ function getOrCreateSheet(name) {
       "Category",
       "Photo Title",
       "Description",
-      "Drive File ID",
+      "GitHub Path",
       "Image URL",
-      "Status"
+      "Status",
+      "File SHA"
     ]);
-    sheet.getRange(1, 1, 1, 9).setFontWeight("bold").setBackground("#0a192f").setFontColor("#ffffff");
+    sheet.getRange(1, 1, 1, 10).setFontWeight("bold").setBackground("#0a192f").setFontColor("#ffffff");
     sheet.setFrozenRows(1);
   }
   return spreadsheet.getActiveSheet();

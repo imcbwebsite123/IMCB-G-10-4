@@ -824,12 +824,12 @@
       }
 
       // UI Loading Feedback
-      submitBtn.disabled = true;
       submitBtnText.innerHTML = "Sending Photo to Email...";
       submitBtnSpinner.classList.remove('d-none');
       alertBox.className = "alert alert-info mb-0";
       alertBox.innerText = "Connecting to mail server & sending photo...";
       alertBox.classList.remove('d-none');
+      setTimeout(() => { submitBtn.disabled = true; }, 50);
 
       return true; // Let standard form submit upload the image attachment to FormSubmit!
     }

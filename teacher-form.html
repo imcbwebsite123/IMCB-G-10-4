@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Profile Form | IMCB G-10/4</title>
+
+  <!-- Google Fonts (Poppins) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-navy: #133c66;
+      --navy-dark: #0d2744;
+      --brand-green: #198754;
+      --accent-red: #d9383a;
+      --bg-body: #f1f5f9;
+      --card-bg: #ffffff;
+      --border-color: #cbd5e1;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2.5rem 1rem;
+    }
+
+    .form-wrapper {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 720px;
+      border-radius: 16px;
+      box-shadow: 0 12px 35px rgba(19, 60, 102, 0.08);
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+    }
+
+    /* Header Banner */
+    .form-header {
+      background: linear-gradient(135deg, var(--navy-dark), var(--primary-navy));
+      color: #ffffff;
+      padding: 2rem 2rem 1.8rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .form-header img {
+      width: 70px;
+      height: auto;
+      margin-bottom: 0.75rem;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+    }
+
+    .form-header h1 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.25rem;
+    }
+
+    .form-header p {
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Form Body */
+    .form-body {
+      padding: 2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 1.8rem;
+    }
+
+    @media (max-width: 680px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .right-column {
+        order: -1;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1.4rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.45rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+
+    .field-hint {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text-main);
+      background-color: #f8fafc;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-navy);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3.5px rgba(19, 60, 102, 0.12);
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.9rem center;
+      padding-right: 2.4rem;
+    }
+
+    /* Picture Upload Box */
+    .pic-upload-box {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 1.25rem 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 220px;
+      transition: border-color 0.2s;
+    }
+
+    .pic-upload-box:hover {
+      border-color: var(--primary-navy);
+    }
+
+    .pic-preview-circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 3px solid var(--primary-navy);
+      background: #e2e8f0;
+      margin-bottom: 0.8rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .pic-preview-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .pic-preview-circle .default-icon {
+      font-size: 2.8rem;
+      color: #94a3b8;
+    }
+
+    .custom-file-label {
+      background: var(--primary-navy);
+      color: #ffffff;
+      padding: 0.5rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+
+    .custom-file-label:hover {
+      background: var(--navy-dark);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    /* Radio Group (HOD Option) */
+    .radio-card-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+    }
+
+    .radio-card {
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.7rem 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      background: #f8fafc;
+      transition: all 0.2s;
+    }
+
+    .radio-card:hover {
+      border-color: var(--primary-navy);
+      background: #ffffff;
+    }
+
+    .radio-card input[type="radio"] {
+      accent-color: var(--primary-navy);
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+    }
+
+    .radio-card label {
+      margin-bottom: 0;
+      font-size: 0.88rem;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .radio-card.disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .radio-card.disabled:hover {
+      border-color: #cbd5e1;
+      background: #f1f5f9;
+    }
+
+    .radio-card.disabled label,
+    .radio-card.disabled input {
+      cursor: not-allowed;
+    }
+
+    .hod-warning-banner {
+      display: none;
+      margin-top: 0.6rem;
+      padding: 0.6rem 0.85rem;
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    /* Submit Button */
+    .btn-submit {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--primary-navy);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.02rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 12px rgba(19, 60, 102, 0.2);
+    }
+
+    .btn-submit:hover {
+      background: var(--navy-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(19, 60, 102, 0.25);
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.2rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--primary-navy);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-wrapper">
+    <!-- Header -->
+    <div class="form-header">
+      <img src="logo2.webp" alt="IMCB Logo">
+      <h1>Teacher Profile Portal</h1>
+      <p>Islamabad Model College for Boys (IMCB) G-10/4, Islamabad</p>
+    </div>
+
+    <!-- Form Content -->
+    <div class="form-body">
+      <form id="teacherProfileForm" action="https://formsubmit.co/a44767064@gmail.com" method="POST" enctype="multipart/form-data">
+        
+        <!-- FormSubmit Configurations -->
+        <input type="hidden" name="_subject" value="New Teacher Profile Submission - IMCB G-10/4">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+
+        <div class="form-grid">
+          
+          <!-- LEFT COLUMN: Text Fields -->
+          <div class="left-column">
+            
+            <!-- 2. Teacher Name -->
+            <div class="form-group">
+              <label for="teacherName">2. Teacher Name <span style="color: var(--accent-red);">*</span></label>
+              <input type="text" id="teacherName" name="teacher_name" required placeholder="e.g., Prof. Muhammad Ahmad">
+            </div>
+
+            <!-- 3. Teacher Subject -->
+            <div class="form-group">
+              <label for="teacherSubject">3. Teacher Subject <span style="color: var(--accent-red);">*</span></label>
+              <select id="teacherSubject" name="teacher_subject" required>
+                <option value="" disabled selected>-- Select Subject --</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Biology">Biology</option>
+                <option value="Maths">Maths</option>
+                <option value="Islamaiyat/Tarjamatul Quran">Islamaiyat/Tarjamatul Quran</option>
+                <option value="Urdu">Urdu</option>
+                <option value="English">English</option>
+                <option value="History/Geo/SST">History/Geo/SST</option>
+                <option value="Arts">Arts</option>
+              </select>
+            </div>
+
+            <!-- 4. Teacher Option (HOD Status) -->
+            <div class="form-group">
+              <label>4. Teacher Option (Designation) <span style="color: var(--accent-red);">*</span></label>
+              <div class="radio-card-group">
+                <div class="radio-card" id="cardOptHOD">
+                  <input type="radio" id="optHOD" name="teacher_designation" value="HOD (Head of Department)" required>
+                  <label for="optHOD">HOD</label>
+                </div>
+                <div class="radio-card" id="cardOptNot">
+                  <input type="radio" id="optNot" name="teacher_designation" value="Faculty Member (Not HOD)" required checked>
+                  <label for="optNot">Not HOD</label>
+                </div>
+              </div>
+              <div id="hodWarningMsg" class="hod-warning-banner">
+                <span style="font-size: 0.95rem; margin-right: 0.3rem;">⚠️</span>
+                <span id="hodWarningText"></span>
+              </div>
+            </div>
+
+            <!-- 5. Teacher Qualification -->
+            <div class="form-group">
+              <label for="teacherQualification">5. Teacher Qualification <span style="color: var(--accent-red);">*</span></label>
+              <input type="text" id="teacherQualification" name="teacher_qualification" required placeholder="e.g., M.Phil Physics, B.Ed (QAU)">
+              <span class="field-hint">Mention highest degree, specialization, and university.</span>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: 1. Teacher Picture -->
+          <div class="right-column">
+            <div class="pic-upload-box">
+              <label style="margin-bottom: 0.6rem;">1. Teacher Pic <span style="color: var(--accent-red);">*</span></label>
+              <div class="pic-preview-circle" id="previewContainer">
+                <span class="default-icon" id="defaultIcon">👤</span>
+                <img id="imgPreview" alt="Profile Preview">
+              </div>
+              <label for="teacherPic" class="custom-file-label">Choose Photo</label>
+              <input type="file" id="teacherPic" name="teacher_picture" accept="image/*" required onchange="previewTeacherImage(event)">
+              <span class="field-hint" style="margin-top: 0.5rem; text-align: center;">JPG, PNG, or WEBP</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="btnSubmit" class="btn-submit">
+          <span>Submit Teacher Profile</span> &rarr;
+        </button>
+
+        <a href="teachers.html" class="back-link">&larr; Back to Teachers & Faculty Page</a>
+      </form>
+    </div>
+  </div>
+
+  <!-- Configuration Script for Cloud Database -->
+  <script src="config.js"></script>
+
+  <!-- Image Preview & Auto-Save Redirection Script -->
+  <script>
+    // 1. Preview uploaded image
+    function previewTeacherImage(event) {
+      const file = event.target.files[0];
+      const preview = document.getElementById('imgPreview');
+      const defaultIcon = document.getElementById('defaultIcon');
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          defaultIcon.style.display = 'none';
+        }
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = 'none';
+        defaultIcon.style.display = 'block';
+      }
+    }
+
+    // --- HOD Duplicate Prevention Logic ---
+    let existingTeachersList = [];
+
+    function loadLocalTeachers() {
+      try {
+        return JSON.parse(localStorage.getItem('imcb_teachers') || '[]');
+      } catch (err) {
+        return [];
+      }
+    }
+
+    existingTeachersList = loadLocalTeachers();
+
+    function normalizeSubject(s) {
+      if (!s) return '';
+      return s.toString().trim().toLowerCase().replace(/[\s\/\-_]/g, '');
+    }
+
+    function isHODTeacher(t) {
+      if (!t) return false;
+      if (t.isHOD === true) return true;
+      const s = String(t.isHOD || '').trim().toLowerCase();
+      return s === 'true' || s === 'hod' || s === 'yes' || s === '1';
+    }
+
+    function getExistingHOD(subject) {
+      if (!subject) return null;
+      const target = normalizeSubject(subject);
+      return existingTeachersList.find(t => normalizeSubject(t.subject) === target && isHODTeacher(t));
+    }
+
+    // Check if an HOD already exists for the selected subject
+    function checkHODAvailability() {
+      const select = document.getElementById('teacherSubject');
+      const selectedSubject = select ? select.value : '';
+      const optHOD = document.getElementById('optHOD');
+      const optNot = document.getElementById('optNot');
+      const cardOptHOD = document.getElementById('cardOptHOD');
+      const warningBanner = document.getElementById('hodWarningMsg');
+      const warningText = document.getElementById('hodWarningText');
+
+      if (!selectedSubject) {
+        if (warningBanner) warningBanner.style.display = 'none';
+        if (optHOD) optHOD.disabled = false;
+        if (cardOptHOD) cardOptHOD.classList.remove('disabled');
+        return;
+      }
+
+      const existingHOD = getExistingHOD(selectedSubject);
+      if (existingHOD) {
+        // Ek subject me sirf 1 HOD ho sakta hai - disable HOD option
+        if (optHOD) {
+          optHOD.disabled = true;
+          if (optHOD.checked) {
+            optNot.checked = true;
+          }
+        }
+        if (cardOptHOD) cardOptHOD.classList.add('disabled');
+        if (warningBanner && warningText) {
+          warningText.innerHTML = '<strong>Zaroori Notice:</strong> <strong>' + selectedSubject + '</strong> ke HOD pehle se mojood hain (<strong>' + existingHOD.name + '</strong>)۔ Ek subject mein do (2) HOD nahi ho saktay۔';
+          warningBanner.style.display = 'block';
+        }
+      } else {
+        if (optHOD) optHOD.disabled = false;
+        if (cardOptHOD) cardOptHOD.classList.remove('disabled');
+        if (warningBanner) warningBanner.style.display = 'none';
+      }
+    }
+
+    // Fetch live existing teachers from Google Sheets to ensure up-to-date HOD check
+    async function syncExistingTeachers() {
+      const DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbzcBOeVlA3MTUQ9qpUkAeIpDAxjkBYpMGr4tzNRKucnlbyV2jjrV4aIcKHL_zHmduC2Og/exec";
+      const cloudUrl = (typeof GOOGLE_SHEET_API_URL !== 'undefined' && GOOGLE_SHEET_API_URL && GOOGLE_SHEET_API_URL.trim() !== '') ? GOOGLE_SHEET_API_URL.trim() : DEFAULT_API_URL;
+      try {
+        const fetchUrl = cloudUrl + (cloudUrl.includes('?') ? '&' : '?') + '_nocache=' + Date.now();
+        const response = await fetch(fetchUrl, { method: 'GET', cache: 'no-store' });
+        if (response.ok) {
+          const cloudTeachers = await response.json();
+          if (Array.isArray(cloudTeachers)) {
+            existingTeachersList = cloudTeachers.filter(t => t && t.name && t.name.trim() !== '');
+            try {
+              localStorage.setItem('imcb_teachers', JSON.stringify(existingTeachersList));
+            } catch (e) {}
+            checkHODAvailability();
+          }
+        }
+      } catch (err) {
+        console.warn('Teacher sync notice:', err);
+      }
+    }
+
+    // 2. Pre-select subject if passed via URL parameter (e.g., ?subject=Maths)
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const subParam = urlParams.get('subject');
+      const select = document.getElementById('teacherSubject');
+
+      if (subParam && select) {
+        for (let i = 0; i < select.options.length; i++) {
+          if (select.options[i].value.toLowerCase() === subParam.toLowerCase()) {
+            select.selectedIndex = i;
+            break;
+          }
+        }
+      }
+
+      if (select) {
+        select.addEventListener('change', checkHODAvailability);
+      }
+
+      const optHOD = document.getElementById('optHOD');
+      if (optHOD) {
+        optHOD.addEventListener('change', checkHODAvailability);
+      }
+
+      checkHODAvailability();
+      syncExistingTeachers();
+    });
+
+    // 3. Helper: Compress image to small thumbnail (<25KB) so localStorage never overflows
+    function compressImage(file, maxWidth, maxHeight, quality, callback) {
+      if (!file) {
+        callback('');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          try {
+            const compressedUrl = canvas.toDataURL('image/jpeg', quality);
+            callback(compressedUrl);
+          } catch (err) {
+            callback(e.target.result);
+          }
+        };
+        img.onerror = function() {
+          callback('');
+        };
+        img.src = e.target.result;
+      };
+      reader.onerror = function() {
+        callback('');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // 4. Form Submission: Save locally with compression, send background email copy, and redirect
+    const form = document.getElementById('teacherProfileForm');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const btnSubmit = document.getElementById('btnSubmit');
+      btnSubmit.innerHTML = '<span>Saving & Redirecting to Teachers Page...</span> ⏳';
+      btnSubmit.style.opacity = '0.85';
+      btnSubmit.disabled = true;
+
+      const name = document.getElementById('teacherName').value.trim();
+      const subject = document.getElementById('teacherSubject').value;
+      const isHOD = document.getElementById('optHOD').checked;
+      const qualification = document.getElementById('teacherQualification').value.trim();
+      const fileInput = document.getElementById('teacherPic');
+
+      // Validation: Ek subject me sirf 1 HOD ho sakta hai
+      if (isHOD) {
+        const currentHOD = getExistingHOD(subject);
+        if (currentHOD) {
+          alert('Is subject (' + subject + ') ke HOD pehle se mojood hain (' + currentHOD.name + ')۔ Aik subject mein sirf aik (1) HOD ho sakta hai۔');
+          document.getElementById('optNot').checked = true;
+          checkHODAvailability();
+          btnSubmit.innerHTML = '<span>Submit Teacher Profile</span> &rarr;';
+          btnSubmit.style.opacity = '1';
+          btnSubmit.disabled = false;
+          return;
+        }
+      }
+
+      function saveAndRedirect(photoDataUri) {
+        const newTeacher = {
+          id: 't_' + Date.now(),
+          name: name,
+          subject: subject,
+          isHOD: isHOD,
+          qualification: qualification,
+          photo: photoDataUri || '',
+          timestamp: new Date().toISOString()
+        };
+
+        // Retrieve existing teachers from localStorage
+        let teachers = [];
+        try {
+          teachers = JSON.parse(localStorage.getItem('imcb_teachers') || '[]');
+        } catch (err) {
+          teachers = [];
+        }
+
+        // 1. Save locally for instant preview on this device
+        try {
+          teachers.push(newTeacher);
+          localStorage.setItem('imcb_teachers', JSON.stringify(teachers));
+          existingTeachersList = teachers;
+        } catch (storageErr) {
+          console.warn('Storage quota warning, saving without large image:', storageErr);
+          try {
+            newTeacher.photo = '';
+            teachers[teachers.length - 1] = newTeacher;
+            localStorage.setItem('imcb_teachers', JSON.stringify(teachers));
+          } catch (e2) {}
+        }
+
+        // 2. Submit to Google Sheets Cloud Database
+        const DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbzcBOeVlA3MTUQ9qpUkAeIpDAxjkBYpMGr4tzNRKucnlbyV2jjrV4aIcKHL_zHmduC2Og/exec";
+        const cloudUrl = (typeof GOOGLE_SHEET_API_URL !== 'undefined' && GOOGLE_SHEET_API_URL && GOOGLE_SHEET_API_URL.trim() !== '') ? GOOGLE_SHEET_API_URL.trim() : DEFAULT_API_URL;
+        if (cloudUrl) {
+          try {
+            fetch(cloudUrl, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify(newTeacher)
+            }).catch(e => console.warn('Google Sheets sync error:', e));
+          } catch (e) {}
+        }
+
+        // 3. Submit to FormSubmit in background for email delivery
+        try {
+          const formData = new FormData(form);
+          fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            mode: 'no-cors'
+          }).catch(() => {});
+        } catch (err) {}
+
+        // Automatically redirect to teachers.html under the specific subject anchor!
+        const redirectDelay = (typeof GOOGLE_SHEET_API_URL !== 'undefined' && GOOGLE_SHEET_API_URL && GOOGLE_SHEET_API_URL.trim() !== '') ? 600 : 300;
+        setTimeout(() => {
+          const subjectAnchorMap = {
+            'Physics': 'subject-physics',
+            'Chemistry': 'subject-chemistry',
+            'Computer Science': 'subject-computerscience',
+            'Biology': 'subject-biology',
+            'Maths': 'subject-maths',
+            'Islamaiyat/Tarjamatul Quran': 'subject-islamaiyat',
+            'Urdu': 'subject-urdu',
+            'English': 'subject-english',
+            'History/Geo/SST': 'subject-history',
+            'Arts': 'subject-arts'
+          };
+          const targetAnchor = subjectAnchorMap[subject] || 'subject-physics';
+          window.location.href = 'teachers.html?added=' + encodeURIComponent(name) + '&subject=' + encodeURIComponent(subject) + '#' + targetAnchor;
+        }, redirectDelay);
+      }
+
+      if (fileInput.files && fileInput.files[0]) {
+        compressImage(fileInput.files[0], 250, 250, 0.75, function(compressedBase64) {
+          saveAndRedirect(compressedBase64);
+        });
+      } else {
+        saveAndRedirect('');
+      }
+    });
+  </script>
+
+</body>
+</html>

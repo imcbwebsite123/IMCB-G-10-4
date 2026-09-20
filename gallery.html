@@ -478,26 +478,6 @@
         </div>
       </div>
 
-      <!-- Photo 10B: Muhammad Abdullah Awan - President Student Council -->
-      <div class="col-md-6 col-lg-4 gallery-item" data-category="students">
-        <div class="gallery-card" onclick="openLightbox('council-president.webp', 'Muhammad Abdullah Awan - President of Student Council', 'Muhammad Abdullah Awan, student of HSSC-II and President of the Student Council at IMCB G-10/4.')">
-          <div class="gallery-img-container">
-            <img src="council-president.webp" alt="Muhammad Abdullah Awan - President Student Council" class="gallery-img">
-            <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
-            <div class="gallery-overlay">
-              <div>
-                <span class="badge bg-warning text-dark small fw-bold mb-1"><i class="bi bi-person-fill me-1"></i>Student Council</span>
-                <h6 class="fw-bold mb-0 text-white">President Student Council</h6>
-              </div>
-            </div>
-          </div>
-          <div class="gallery-info-body">
-            <h6 class="fw-bold text-navy mb-1">Muhammad Abdullah Awan</h6>
-            <p class="small text-muted mb-0">President of the Student Council (HSSC-II) leading student events and activities at IMCB G-10/4.</p>
-          </div>
-        </div>
-      </div>
-
       <!-- Photo 11: Junior Section Graduation & Merit Awards -->
       <div class="col-md-6 col-lg-4 gallery-item" data-category="awards">
         <div class="gallery-card" onclick="openLightbox('awards-ceremony.webp', 'Junior Section Graduation & Merit Awards', 'Principal Prof. Ihsaan Ul Haq and teachers honoring young junior students with merit certificates and trophies on Annual Result Day.')">
@@ -961,11 +941,6 @@
           const grid = document.getElementById('galleryGrid');
           
           data.photos.forEach(photo => {
-            // Skip if already present in the gallery to prevent duplicates
-            if (photo.title && grid.innerText.includes(photo.title)) {
-              return;
-            }
-
             const col = document.createElement('div');
             col.className = 'col-md-6 col-lg-4 gallery-item community-item';
             
@@ -981,11 +956,12 @@
             
             const card = document.createElement('div');
             card.className = 'gallery-card';
-            card.onclick = () => openLightbox(photo.imageUrl, photo.title, (photo.description || photo.title) + (photo.submitter ? " - Contributed by " + photo.submitter : ""));
+            const displayTitle = (photo.submitter && photo.title) ? (photo.submitter + " - " + photo.title) : (photo.title || "Community Photo");
+            card.onclick = () => openLightbox(photo.imageUrl, displayTitle, (photo.description || photo.title));
             
             card.innerHTML = `
               <div class="gallery-img-container">
-                <img src="${photo.imageUrl}" alt="${photo.title}" class="gallery-img">
+                <img src="${photo.imageUrl}" alt="${displayTitle}" class="gallery-img">
                 <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
                 <div class="gallery-overlay">
                   <div>
@@ -996,11 +972,11 @@
               </div>
               <div class="gallery-info-body">
                 <div class="d-flex justify-content-between align-items-center mb-1">
-                  <h6 class="fw-bold text-navy mb-0">${photo.title}</h6>
+                  <h6 class="fw-bold text-navy mb-0">${photo.submitter ? photo.submitter : photo.title}</h6>
                   <span class="badge bg-light text-muted border small">${photo.category}</span>
                 </div>
-                <p class="small text-muted mb-0">${photo.description ? photo.description : (photo.submitter ? 'Contributed by ' + photo.submitter : '')}</p>
-                ${photo.submitter ? `<small class="text-primary d-block mt-1" style="font-size: 0.75rem;"><i class="bi bi-person-check-fill me-1"></i>By ${photo.submitter}</small>` : ''}
+                <p class="small text-muted mb-0">${photo.description ? photo.description : ''}</p>
+                <small class="text-primary d-block mt-1" style="font-size: 0.75rem;"><i class="bi bi-person-badge-fill me-1"></i>${photo.title}</small>
               </div>
             `;
             

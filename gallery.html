@@ -66,10 +66,13 @@
     .gallery-img-container {
       position: relative;
       overflow: hidden;
-      background: #0f172a;
-      aspect-ratio: 16 / 10;
+      background: #071731;
+      height: 265px;
       width: 100%;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .gallery-img {
@@ -81,14 +84,20 @@
       transition: transform 0.5s ease;
     }
 
+    /* Contain mode for wide panoramas (Student Council) & portraits so no one is cut off */
+    .gallery-img-contain {
+      object-fit: contain !important;
+      background: #071731;
+    }
+
     .gallery-card:hover .gallery-img {
-      transform: scale(1.06);
+      transform: scale(1.05);
     }
 
     .gallery-overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(180deg, transparent 40%, rgba(10, 25, 47, 0.85) 100%);
+      background: linear-gradient(180deg, transparent 40%, rgba(10, 25, 47, 0.88) 100%);
       opacity: 0.85;
       transition: opacity 0.3s ease;
       display: flex;
@@ -148,9 +157,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 420px;
-      max-height: 75vh;
-      background: rgba(5, 15, 30, 0.9);
+      min-height: 520px;
+      max-height: 80vh;
+      background: rgba(5, 15, 30, 0.96);
       border-radius: 18px;
       overflow: hidden;
       box-shadow: 0 25px 60px rgba(0,0,0,0.6);
@@ -159,8 +168,9 @@
 
     .lightbox-modal-img {
       max-width: 100%;
-      max-height: 75vh;
-      width: auto;
+      max-height: 78vh;
+      min-height: min(480px, 70vh);
+      width: 100%;
       height: auto;
       object-fit: contain;
       display: block;
@@ -215,6 +225,9 @@
     }
 
     @media (max-width: 576px) {
+      .gallery-img-container {
+        height: 230px;
+      }
       .lightbox-nav-btn {
         width: 42px;
         height: 42px;
@@ -222,7 +235,8 @@
       }
       .lightbox-prev { left: 0.5rem; }
       .lightbox-next { right: 0.5rem; }
-      .lightbox-stage { min-height: 280px; }
+      .lightbox-stage { min-height: 300px; }
+      .lightbox-modal-img { min-height: auto; }
     }
   </style>
 </head>
@@ -483,7 +497,7 @@
       <div class="col-md-6 col-lg-4 gallery-item" data-category="sports">
         <div class="gallery-card" onclick="openLightbox('ct2025.webp', 'IMCB G-10/4 Cricket Team', 'Official squad of Islamabad Model College for Boys G-10/4 cricket team in white kits.')">
           <div class="gallery-img-container">
-            <img src="ct2025.webp" alt="IMCB Cricket Team" class="gallery-img">
+            <img src="ct2025.webp" alt="IMCB Cricket Team" class="gallery-img" style="object-position: center 36%;">
             <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
             <div class="gallery-overlay">
               <div>
@@ -503,7 +517,7 @@
       <div class="col-md-6 col-lg-4 gallery-item" data-category="sports">
         <div class="gallery-card" onclick="openLightbox('ht25.webp', 'IMCB G-10/4 Hockey Team', 'College hockey team with coaches and sporting equipment on the turf ground.')">
           <div class="gallery-img-container">
-            <img src="ht25.webp" alt="IMCB Hockey Team" class="gallery-img">
+            <img src="ht25.webp" alt="IMCB Hockey Team" class="gallery-img" style="object-position: center 42%;">
             <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
             <div class="gallery-overlay">
               <div>
@@ -523,7 +537,7 @@
       <div class="col-md-6 col-lg-4 gallery-item" data-category="sports">
         <div class="gallery-card" onclick="openLightbox('football-team.webp', 'IMCB G-10/4 Football Team', 'College football team squad huddled on the athletic field before the match.')">
           <div class="gallery-img-container">
-            <img src="football-team.webp" alt="IMCB Football Team" class="gallery-img">
+            <img src="football-team.webp" alt="IMCB Football Team" class="gallery-img" style="object-position: center 40%;">
             <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
             <div class="gallery-overlay">
               <div>
@@ -543,7 +557,7 @@
       <div class="col-md-6 col-lg-4 gallery-item" data-category="students">
         <div class="gallery-card" onclick="openLightbox('Council.webp', 'Student Council & Event Organizers', 'Portrait of the college student council leaders dressed in official uniform and ties.')">
           <div class="gallery-img-container">
-            <img src="Council.webp" alt="Student Council Batch" class="gallery-img">
+            <img src="Council.webp" alt="Student Council Batch" class="gallery-img gallery-img-contain">
             <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
             <div class="gallery-overlay">
               <div>
@@ -563,7 +577,7 @@
       <div class="col-md-6 col-lg-4 gallery-item" data-category="awards">
         <div class="gallery-card" onclick="openLightbox('awards-ceremony.webp', 'Junior Section Graduation & Merit Awards', 'Principal Prof. Ihsaan Ul Haq and teachers honoring young junior students with merit certificates and trophies on Annual Result Day.')">
           <div class="gallery-img-container">
-            <img src="awards-ceremony.webp" alt="Junior Section Graduation & Merit Awards" class="gallery-img">
+            <img src="awards-ceremony.webp" alt="Junior Section Graduation & Merit Awards" class="gallery-img" style="object-position: center 25%;">
             <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
             <div class="gallery-overlay">
               <div>
@@ -582,8 +596,8 @@
       <!-- Photo 12: Principal Prof. Ihsaan Ul Haq -->
       <div class="col-md-6 col-lg-4 gallery-item" data-category="faculty">
         <div class="gallery-card" onclick="openLightbox('principle.webp', 'Prof. Ihsaan Ul Haq - Principal IMCB G-10/4', 'Principal of Islamabad Model College for Boys G-10/4 leading institutional vision, discipline, and academic progress.')">
-          <div class="gallery-img-container" style="background: #e2e8f0;">
-            <img src="principle.webp" alt="Principal IMCB G-10/4" class="gallery-img" style="object-position: top;">
+          <div class="gallery-img-container">
+            <img src="principle.webp" alt="Principal IMCB G-10/4" class="gallery-img" style="object-position: center 20%;">
             <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
             <div class="gallery-overlay">
               <div>
@@ -1206,7 +1220,7 @@
             
             card.innerHTML = `
               <div class="gallery-img-container">
-                <img src="${photo.imageUrl}" alt="${displayTitle}" class="gallery-img">
+                <img src="${photo.imageUrl}" alt="${displayTitle}" class="gallery-img gallery-img-contain" onload="if(this.naturalWidth >= this.naturalHeight * 1.25){ this.classList.remove('gallery-img-contain'); }">
                 <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
                 <div class="gallery-overlay">
                   <div>

@@ -403,14 +403,15 @@
           <!-- RIGHT COLUMN: 1. Teacher Picture -->
           <div class="right-column">
             <div class="pic-upload-box">
-              <label style="margin-bottom: 0.6rem;">1. Teacher Pic <span style="color: var(--accent-red);">*</span></label>
+              <label style="margin-bottom: 0.6rem;">1. Teacher Pic <span style="color: var(--text-muted); font-size: 0.8rem; font-weight: normal;">(Optional)</span></label>
               <div class="pic-preview-circle" id="previewContainer">
                 <span class="default-icon" id="defaultIcon">👤</span>
                 <img id="imgPreview" alt="Profile Preview">
               </div>
               <label for="teacherPic" class="custom-file-label">Choose Photo</label>
-              <input type="file" id="teacherPic" name="teacher_picture" accept="image/*" required onchange="previewTeacherImage(event)">
-              <span class="field-hint" style="margin-top: 0.5rem; text-align: center;">JPG, PNG, or WEBP</span>
+              <input type="file" id="teacherPic" name="teacher_picture" accept="image/*" onchange="previewTeacherImage(event)">
+              <button type="button" id="btnClearPhoto" style="display: none; background: none; border: none; color: var(--accent-red); font-size: 0.78rem; margin-top: 0.4rem; cursor: pointer; text-decoration: underline;" onclick="clearTeacherPhoto()">Remove Photo</button>
+              <span class="field-hint" style="margin-top: 0.5rem; text-align: center;">Optional — JPG, PNG, or WEBP</span>
             </div>
           </div>
 
@@ -436,6 +437,7 @@
       const file = event.target.files[0];
       const preview = document.getElementById('imgPreview');
       const defaultIcon = document.getElementById('defaultIcon');
+      const btnClear = document.getElementById('btnClearPhoto');
 
       if (file) {
         const reader = new FileReader();
@@ -443,12 +445,24 @@
           preview.src = e.target.result;
           preview.style.display = 'block';
           defaultIcon.style.display = 'none';
+          if (btnClear) btnClear.style.display = 'inline-block';
         }
         reader.readAsDataURL(file);
       } else {
-        preview.style.display = 'none';
-        defaultIcon.style.display = 'block';
+        clearTeacherPhoto();
       }
+    }
+
+    function clearTeacherPhoto() {
+      const fileInput = document.getElementById('teacherPic');
+      const preview = document.getElementById('imgPreview');
+      const defaultIcon = document.getElementById('defaultIcon');
+      const btnClear = document.getElementById('btnClearPhoto');
+      fileInput.value = '';
+      preview.src = '';
+      preview.style.display = 'none';
+      defaultIcon.style.display = 'block';
+      if (btnClear) btnClear.style.display = 'none';
     }
 
     // --- HOD Duplicate Prevention Logic ---

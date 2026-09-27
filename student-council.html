@@ -65,47 +65,73 @@
       border-color: var(--primary-navy);
     }
 
-    /* Dedicated Floating & Dynamic Shadow Effect for Arts & Cultural Society Card */
+    /* Dedicated Continuous Shake/Movement & Dynamic Shadow Effect for Arts & Cultural Society Card */
     .arts-cultural-card {
       position: relative;
       border: 2px solid var(--primary-navy) !important;
-      animation: artsCardFloat 3s ease-in-out infinite;
-      box-shadow: 0 12px 30px rgba(19, 60, 102, 0.16);
+      animation: artsCardContinuousShake 1.8s ease-in-out infinite;
+      box-shadow: 0 14px 34px rgba(19, 60, 102, 0.22), 0 0 15px rgba(19, 60, 102, 0.12);
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
-    @keyframes artsCardFloat {
-      0%, 100% {
-        transform: translateY(0px);
-        box-shadow: 0 12px 30px rgba(19, 60, 102, 0.16);
+    @keyframes artsCardContinuousShake {
+      0% {
+        transform: translateY(0px) rotate(0deg);
+        box-shadow: 0 14px 30px rgba(19, 60, 102, 0.2);
       }
-      50% {
-        transform: translateY(-9px);
-        box-shadow: 0 24px 44px rgba(19, 60, 102, 0.26), 0 0 20px rgba(19, 60, 102, 0.12);
+      20% {
+        transform: translateY(-8px) rotate(-1.5deg);
+        box-shadow: 0 24px 44px rgba(19, 60, 102, 0.28), 0 0 20px rgba(19, 60, 102, 0.15);
+      }
+      40% {
+        transform: translateY(-3px) rotate(1.2deg);
+        box-shadow: 0 18px 36px rgba(19, 60, 102, 0.24), 0 0 16px rgba(19, 60, 102, 0.12);
+      }
+      60% {
+        transform: translateY(-9px) rotate(-1deg);
+        box-shadow: 0 26px 46px rgba(19, 60, 102, 0.3), 0 0 22px rgba(19, 60, 102, 0.16);
+      }
+      80% {
+        transform: translateY(-2px) rotate(0.8deg);
+        box-shadow: 0 16px 32px rgba(19, 60, 102, 0.22), 0 0 14px rgba(19, 60, 102, 0.1);
+      }
+      100% {
+        transform: translateY(0px) rotate(0deg);
+        box-shadow: 0 14px 30px rgba(19, 60, 102, 0.2);
       }
     }
 
     .arts-cultural-card:hover {
-      animation: artsCardHoverWiggle 0.6s ease-in-out infinite alternate !important;
+      animation: artsCardHoverWiggle 0.45s ease-in-out infinite alternate !important;
       border-color: #f59e0b !important;
-      box-shadow: 0 28px 55px rgba(19, 60, 102, 0.32), 0 0 25px rgba(245, 158, 11, 0.25) !important;
+      box-shadow: 0 28px 55px rgba(19, 60, 102, 0.34), 0 0 28px rgba(245, 158, 11, 0.3) !important;
     }
 
     @keyframes artsCardHoverWiggle {
       0% {
-        transform: translateY(-10px) rotate(-1deg);
+        transform: translateY(-11px) rotate(-2deg) scale(1.02);
       }
       100% {
-        transform: translateY(-12px) rotate(1deg);
+        transform: translateY(-13px) rotate(2deg) scale(1.02);
       }
     }
 
     .arts-cultural-card .council-icon-circle {
+      animation: artsIconPulse 1.8s ease-in-out infinite;
       transition: transform 0.35s ease;
     }
 
+    @keyframes artsIconPulse {
+      0%, 100% {
+        transform: scale(1) rotate(0deg);
+      }
+      50% {
+        transform: scale(1.12) rotate(-8deg);
+      }
+    }
+
     .arts-cultural-card:hover .council-icon-circle {
-      transform: scale(1.15) rotate(-10deg);
+      transform: scale(1.22) rotate(-15deg);
     }
 
     .council-icon-circle {

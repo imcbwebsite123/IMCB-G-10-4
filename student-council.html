@@ -55,14 +55,57 @@
       border: 1.5px solid #e2e8f0;
       border-radius: 16px;
       padding: 1.5rem;
-      transition: all 0.25s ease;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       height: 100%;
     }
 
     .council-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 28px rgba(19, 60, 102, 0.09);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 32px rgba(19, 60, 102, 0.12);
       border-color: var(--primary-navy);
+    }
+
+    /* Dedicated Floating & Dynamic Shadow Effect for Arts & Cultural Society Card */
+    .arts-cultural-card {
+      position: relative;
+      border: 2px solid var(--primary-navy) !important;
+      animation: artsCardFloat 3s ease-in-out infinite;
+      box-shadow: 0 12px 30px rgba(19, 60, 102, 0.16);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    @keyframes artsCardFloat {
+      0%, 100% {
+        transform: translateY(0px);
+        box-shadow: 0 12px 30px rgba(19, 60, 102, 0.16);
+      }
+      50% {
+        transform: translateY(-9px);
+        box-shadow: 0 24px 44px rgba(19, 60, 102, 0.26), 0 0 20px rgba(19, 60, 102, 0.12);
+      }
+    }
+
+    .arts-cultural-card:hover {
+      animation: artsCardHoverWiggle 0.6s ease-in-out infinite alternate !important;
+      border-color: #f59e0b !important;
+      box-shadow: 0 28px 55px rgba(19, 60, 102, 0.32), 0 0 25px rgba(245, 158, 11, 0.25) !important;
+    }
+
+    @keyframes artsCardHoverWiggle {
+      0% {
+        transform: translateY(-10px) rotate(-1deg);
+      }
+      100% {
+        transform: translateY(-12px) rotate(1deg);
+      }
+    }
+
+    .arts-cultural-card .council-icon-circle {
+      transition: transform 0.35s ease;
+    }
+
+    .arts-cultural-card:hover .council-icon-circle {
+      transform: scale(1.15) rotate(-10deg);
     }
 
     .council-icon-circle {
@@ -275,7 +318,7 @@
       <div class="row g-4">
         <!-- 1. Arts, Drama & Cultural Society -->
         <div class="col-md-6 col-lg-4">
-          <div class="council-card">
+          <div class="council-card arts-cultural-card">
             <div class="council-icon-circle bg-primary bg-opacity-10 text-primary">
               <i class="bi bi-palette2"></i>
             </div>

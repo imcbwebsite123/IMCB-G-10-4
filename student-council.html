@@ -52,83 +52,87 @@
 
     .council-card {
       background: #ffffff;
-      border: 1.5px solid #e2e8f0;
+      border: 2px solid rgba(19, 60, 102, 0.2);
       border-radius: 16px;
       padding: 1.5rem;
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       height: 100%;
+      position: relative;
+      transform-origin: center center;
+      animation: councilCardContinuousShake 1.6s ease-in-out infinite;
+      box-shadow: 0 14px 34px rgba(19, 60, 102, 0.2), 0 0 18px rgba(19, 60, 102, 0.12);
+    }
+
+    /* Staggered animation delay for all 6 wing cards for an organic wave motion */
+    .row.g-4 > div:nth-child(1) .council-card { animation-delay: 0s; }
+    .row.g-4 > div:nth-child(2) .council-card { animation-delay: 0.28s; }
+    .row.g-4 > div:nth-child(3) .council-card { animation-delay: 0.56s; }
+    .row.g-4 > div:nth-child(4) .council-card { animation-delay: 0.84s; }
+    .row.g-4 > div:nth-child(5) .council-card { animation-delay: 1.12s; }
+    .row.g-4 > div:nth-child(6) .council-card { animation-delay: 1.4s; }
+
+    @keyframes councilCardContinuousShake {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        box-shadow: 0 14px 30px rgba(19, 60, 102, 0.2), 0 0 16px rgba(19, 60, 102, 0.1);
+      }
+      20% {
+        transform: translateY(-9px) rotate(-2deg);
+        box-shadow: 0 24px 46px rgba(19, 60, 102, 0.3), 0 0 24px rgba(19, 60, 102, 0.18);
+      }
+      40% {
+        transform: translateY(-3px) rotate(1.8deg);
+        box-shadow: 0 18px 34px rgba(19, 60, 102, 0.24), 0 0 18px rgba(19, 60, 102, 0.12);
+      }
+      60% {
+        transform: translateY(-11px) rotate(-1.8deg);
+        box-shadow: 0 26px 50px rgba(19, 60, 102, 0.32), 0 0 26px rgba(19, 60, 102, 0.2);
+      }
+      80% {
+        transform: translateY(-3px) rotate(1.2deg);
+        box-shadow: 0 16px 32px rgba(19, 60, 102, 0.22), 0 0 16px rgba(19, 60, 102, 0.1);
+      }
     }
 
     .council-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 32px rgba(19, 60, 102, 0.12);
-      border-color: var(--primary-navy);
-    }
-
-    /* Dedicated Continuous Shake/Movement & Dynamic Shadow Effect for Arts & Cultural Society Card */
-    .arts-cultural-card {
-      position: relative;
-      border: 2.5px solid var(--primary-navy) !important;
-      animation: artsCardContinuousShake 1.5s ease-in-out infinite !important;
-      box-shadow: 0 16px 36px rgba(19, 60, 102, 0.25), 0 0 20px rgba(19, 60, 102, 0.15) !important;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      transform-origin: center center;
-    }
-
-    @keyframes artsCardContinuousShake {
-      0%, 100% {
-        transform: translateY(0px) rotate(0deg);
-        box-shadow: 0 14px 30px rgba(19, 60, 102, 0.22), 0 0 16px rgba(19, 60, 102, 0.12);
-      }
-      20% {
-        transform: translateY(-10px) rotate(-2.5deg);
-        box-shadow: 0 25px 48px rgba(19, 60, 102, 0.32), 0 0 25px rgba(19, 60, 102, 0.2);
-      }
-      40% {
-        transform: translateY(-4px) rotate(2deg);
-        box-shadow: 0 18px 36px rgba(19, 60, 102, 0.26), 0 0 18px rgba(19, 60, 102, 0.14);
-      }
-      60% {
-        transform: translateY(-12px) rotate(-2deg);
-        box-shadow: 0 28px 52px rgba(19, 60, 102, 0.35), 0 0 28px rgba(19, 60, 102, 0.22);
-      }
-      80% {
-        transform: translateY(-3px) rotate(1.5deg);
-        box-shadow: 0 16px 34px rgba(19, 60, 102, 0.24), 0 0 16px rgba(19, 60, 102, 0.12);
-      }
-    }
-
-    .arts-cultural-card:hover {
-      animation: artsCardHoverWiggle 0.4s ease-in-out infinite alternate !important;
+      animation: councilCardHoverWiggle 0.4s ease-in-out infinite alternate !important;
       border-color: #f59e0b !important;
-      box-shadow: 0 30px 60px rgba(19, 60, 102, 0.38), 0 0 30px rgba(245, 158, 11, 0.35) !important;
+      box-shadow: 0 30px 60px rgba(19, 60, 102, 0.36), 0 0 28px rgba(245, 158, 11, 0.32) !important;
+      z-index: 10;
     }
 
-    @keyframes artsCardHoverWiggle {
+    @keyframes councilCardHoverWiggle {
       0% {
-        transform: translateY(-11px) rotate(-2deg) scale(1.02);
+        transform: translateY(-10px) rotate(-1.8deg) scale(1.02);
       }
       100% {
-        transform: translateY(-13px) rotate(2deg) scale(1.02);
+        transform: translateY(-12px) rotate(1.8deg) scale(1.02);
       }
     }
 
-    .arts-cultural-card .council-icon-circle {
-      animation: artsIconPulse 1.8s ease-in-out infinite;
+    .council-card .council-icon-circle {
+      animation: councilIconPulse 1.8s ease-in-out infinite;
       transition: transform 0.35s ease;
     }
 
-    @keyframes artsIconPulse {
+    .row.g-4 > div:nth-child(1) .council-icon-circle { animation-delay: 0s; }
+    .row.g-4 > div:nth-child(2) .council-icon-circle { animation-delay: 0.28s; }
+    .row.g-4 > div:nth-child(3) .council-icon-circle { animation-delay: 0.56s; }
+    .row.g-4 > div:nth-child(4) .council-icon-circle { animation-delay: 0.84s; }
+    .row.g-4 > div:nth-child(5) .council-icon-circle { animation-delay: 1.12s; }
+    .row.g-4 > div:nth-child(6) .council-icon-circle { animation-delay: 1.4s; }
+
+    @keyframes councilIconPulse {
       0%, 100% {
         transform: scale(1) rotate(0deg);
       }
       50% {
-        transform: scale(1.12) rotate(-8deg);
+        transform: scale(1.12) rotate(-7deg);
       }
     }
 
-    .arts-cultural-card:hover .council-icon-circle {
-      transform: scale(1.22) rotate(-15deg);
+    .council-card:hover .council-icon-circle {
+      transform: scale(1.22) rotate(-14deg);
     }
 
     .council-icon-circle {
@@ -341,7 +345,7 @@
       <div class="row g-4">
         <!-- 1. Arts, Drama & Cultural Society -->
         <div class="col-md-6 col-lg-4">
-          <div class="council-card arts-cultural-card">
+          <div class="council-card">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <div class="council-icon-circle bg-primary bg-opacity-10 text-primary mb-0">
                 <i class="bi bi-palette2"></i>
@@ -363,8 +367,11 @@
         <!-- 2. Event Management & Stage Operations -->
         <div class="col-md-6 col-lg-4">
           <div class="council-card">
-            <div class="council-icon-circle bg-danger bg-opacity-10 text-danger">
-              <i class="bi bi-megaphone-fill"></i>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="council-icon-circle bg-danger bg-opacity-10 text-danger mb-0">
+                <i class="bi bi-megaphone-fill"></i>
+              </div>
+              <span class="badge bg-danger bg-opacity-10 text-danger fw-bold px-2 py-1 small rounded-pill border border-danger border-opacity-25"><i class="bi bi-calendar-event"></i> Operations Wing</span>
             </div>
             <h5 class="fw-bold text-navy mb-2">Event Management & Operations</h5>
             <p class="small text-muted mb-3">
@@ -381,8 +388,11 @@
         <!-- 3. Social Welfare & Community Service -->
         <div class="col-md-6 col-lg-4">
           <div class="council-card">
-            <div class="council-icon-circle bg-success bg-opacity-10 text-success">
-              <i class="bi bi-heart-pulse-fill"></i>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="council-icon-circle bg-success bg-opacity-10 text-success mb-0">
+                <i class="bi bi-heart-pulse-fill"></i>
+              </div>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold px-2 py-1 small rounded-pill border border-success border-opacity-25"><i class="bi bi-heart-fill"></i> Welfare Wing</span>
             </div>
             <h5 class="fw-bold text-navy mb-2">Social Welfare & Community Service</h5>
             <p class="small text-muted mb-3">
@@ -399,8 +409,11 @@
         <!-- 4. Literary & Debates (Competitions) -->
         <div class="col-md-6 col-lg-4">
           <div class="council-card">
-            <div class="council-icon-circle bg-warning bg-opacity-10 text-warning">
-              <i class="bi bi-chat-quote-fill"></i>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="council-icon-circle bg-warning bg-opacity-10 text-warning mb-0">
+                <i class="bi bi-chat-quote-fill"></i>
+              </div>
+              <span class="badge bg-warning bg-opacity-10 text-warning-emphasis fw-bold px-2 py-1 small rounded-pill border border-warning border-opacity-25"><i class="bi bi-mic-fill"></i> Debating Wing</span>
             </div>
             <h5 class="fw-bold text-navy mb-2">Literary & Debating (Competitions)</h5>
             <p class="small text-muted mb-3">
@@ -417,8 +430,11 @@
         <!-- 5. Science & IT Club -->
         <div class="col-md-6 col-lg-4">
           <div class="council-card">
-            <div class="council-icon-circle bg-info bg-opacity-10 text-info">
-              <i class="bi bi-cpu-fill"></i>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="council-icon-circle bg-info bg-opacity-10 text-info mb-0">
+                <i class="bi bi-cpu-fill"></i>
+              </div>
+              <span class="badge bg-info bg-opacity-10 text-info-emphasis fw-bold px-2 py-1 small rounded-pill border border-info border-opacity-25"><i class="bi bi-laptop"></i> Tech Wing</span>
             </div>
             <h5 class="fw-bold text-navy mb-2">Science & IT Society</h5>
             <p class="small text-muted mb-3">
@@ -435,8 +451,11 @@
         <!-- 6. Publications & Editorial -->
         <div class="col-md-6 col-lg-4">
           <div class="council-card">
-            <div class="council-icon-circle bg-purple bg-opacity-10 text-primary" style="background-color: #f3e8ff !important; color: #7e22ce !important;">
-              <i class="bi bi-journal-richtext"></i>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="council-icon-circle bg-purple bg-opacity-10 text-primary mb-0" style="background-color: #f3e8ff !important; color: #7e22ce !important;">
+                <i class="bi bi-journal-richtext"></i>
+              </div>
+              <span class="badge bg-purple bg-opacity-10 text-purple fw-bold px-2 py-1 small rounded-pill border border-purple border-opacity-25" style="background-color: #f3e8ff; color: #7e22ce;"><i class="bi bi-journal-check"></i> Editorial Wing</span>
             </div>
             <h5 class="fw-bold text-navy mb-2">Magazine & Editorial Board</h5>
             <p class="small text-muted mb-3">

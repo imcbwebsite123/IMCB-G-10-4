@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMCB-G10/4 FEMIS Student Entry Tracking</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-navy: #133c66;
+      --navy-dark: #0d2744;
+      --brand-green: #198754;
+      --brand-amber: #f59e0b;
+      --brand-red: #dc3545;
+      --bg-body: #f8fafc;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Announcement Bar */
+    .top-bar {
+      background-color: var(--navy-dark);
+      color: #cbd5e1;
+      font-size: 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .top-bar a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .top-bar a:hover {
+      text-decoration: underline;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: #ffffff;
+      box-shadow: 0 4px 20px rgba(19, 60, 102, 0.06);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .navbar-brand-logo {
+      height: 48px;
+      width: auto;
+    }
+    .college-title {
+      font-weight: 700;
+      color: var(--primary-navy);
+      line-height: 1.2;
+      font-size: 1.05rem;
+    }
+    .college-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Hero Header */
+    .hero-header {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--primary-navy) 100%);
+      color: #ffffff;
+      padding: 2.2rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-header::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(25, 135, 84, 0.18) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .hero-subtitle {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    /* Main Container */
+    .main-content {
+      flex: 1;
+      padding: 2rem 0;
+    }
+
+    /* Card Box */
+    .custom-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(19, 60, 102, 0.05);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .card-header-styled {
+      background: #ffffff;
+      border-bottom: 1.5px solid #edf2f7;
+      padding: 1.25rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: gap;
+    }
+    .card-header-styled h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary-navy);
+      margin: 0;
+    }
+
+    /* Form Styles */
+    .form-label {
+      font-weight: 600;
+      color: #334155;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+    }
+    .form-control, .form-select {
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.65rem 0.95rem;
+      font-size: 0.92rem;
+      transition: all 0.2s ease;
+      background-color: #ffffff;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-navy);
+      box-shadow: 0 0 0 4px rgba(19, 60, 102, 0.12);
+      outline: none;
+    }
+
+    /* Dynamic Preview Meter */
+    .preview-meter-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-top: 1.2rem;
+    }
+    .progress-bar-custom {
+      height: 12px;
+      border-radius: 6px;
+      background-color: #e2e8f0;
+      overflow: hidden;
+      margin: 0.75rem 0 0.5rem;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3b82f6, var(--brand-green));
+      transition: width 0.4s ease, background 0.4s ease;
+      border-radius: 6px;
+    }
+
+    /* Badges */
+    .status-pill {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.3rem 0.75rem;
+      border-radius: 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-completed {
+      background-color: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+    .status-in-progress {
+      background-color: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+    .status-pending {
+      background-color: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+    }
+
+    /* Quick Suggestion Chips */
+    .chip-btn {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-block;
+      margin-right: 0.35rem;
+      margin-bottom: 0.35rem;
+    }
+    .chip-btn:hover {
+      background-color: var(--primary-navy);
+      color: #ffffff;
+      border-color: var(--primary-navy);
+    }
+
+    /* Action Buttons */
+    .btn-navy {
+      background-color: var(--primary-navy);
+      color: #ffffff;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-navy:hover {
+      background-color: var(--navy-dark);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(19, 60, 102, 0.2);
+    }
+    .btn-green {
+      background-color: var(--brand-green);
+      color: #ffffff;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 0.7rem 1.4rem;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-green:hover {
+      background-color: #146c43;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* Table Styles */
+    .table-custom {
+      margin-bottom: 0;
+      font-size: 0.88rem;
+    }
+    .table-custom th {
+      background-color: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      padding: 0.85rem 1rem;
+      border-bottom: 1.5px solid var(--border-color);
+      white-space: nowrap;
+    }
+    .table-custom td {
+      padding: 0.85rem 1rem;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .table-custom tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--navy-dark);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.82rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 1.5rem 0;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar py-2 text-center">
+    <div class="container-fluid px-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-shield-check text-info"></i>
+        <span>Federal Education Management Information System (<strong>FEMIS</strong>) – Islamabad Capital Territory</span>
+      </div>
+      <div>
+        <a href="femis-infographics.html" class="d-inline-flex align-items-center gap-1 text-warning fw-semibold">
+          <i class="bi bi-graph-up-arrow"></i> Open Infographics & Analytics Dashboard &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-3 px-lg-4">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="logo2.webp" alt="IMCB Crest" class="navbar-brand-logo">
+        <div>
+          <div class="college-title">Islamabad Model College for Boys</div>
+          <div class="college-sub">Sector G-10/4, Islamabad</div>
+        </div>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+        <ul class="navbar-nav align-items-lg-center gap-1 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="teachers.html">Faculty Directory</a></li>
+          <li class="nav-item"><a class="nav-link active fw-bold text-primary" href="femis-tracking.html"><i class="bi bi-ui-checks"></i> FEMIS Entry Form</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold text-success" href="femis-infographics.html"><i class="bi bi-pie-chart-fill"></i> Infographics & Data</a></li>
+          <li class="nav-item ms-lg-2">
+            <a href="femis-infographics.html" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
+              <i class="bi bi-database"></i> Records
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="hero-header">
+    <div class="container-fluid px-3 px-lg-4">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 text-white small mb-2">
+            <i class="bi bi-laptop-fill text-warning"></i> Online Portal Session 2026–27
+          </div>
+          <h1 class="hero-title mb-1">IMCB-G10/4 FEMIS Student Entry Tracking</h1>
+          <p class="hero-subtitle mb-0">
+            Submit, monitor, and update class-wise student enrollment bio-data entered into the Ministry FEMIS portal.
+          </p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+          <a href="femis-infographics.html" class="btn btn-warning fw-bold text-dark px-3 py-2 shadow-sm d-inline-flex align-items-center gap-2">
+            <i class="bi bi-bar-chart-steps"></i> View Infographics & Data File
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-content">
+    <div class="container-fluid px-3 px-lg-4">
+
+      <!-- Alert Notification Banner -->
+      <div id="toastAlert" class="alert d-none shadow-sm rounded-4 border-0 mb-4 fade show" role="alert"></div>
+
+      <div class="row g-4">
+        
+        <!-- ========================================== -->
+        <!-- LEFT COLUMN: THE DATA ENTRY FORM           -->
+        <!-- ========================================== -->
+        <div class="col-lg-6 col-xl-5">
+          <div class="custom-card">
+            
+            <div class="card-header-styled">
+              <div class="d-flex align-items-center gap-2">
+                <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3">
+                  <i class="bi bi-pencil-square fs-5"></i>
+                </div>
+                <div>
+                  <h2 class="mb-0" id="formHeaderTitle">New Student Tracking Entry</h2>
+                  <small class="text-muted">Fill in all details accurately</small>
+                </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="resetForm()" title="Clear form">
+                <i class="bi bi-arrow-counterclockwise"></i> Reset
+              </button>
+            </div>
+
+            <div class="p-4">
+              <form id="femisEntryForm" onsubmit="handleFormSubmit(event)" novalidate>
+                
+                <input type="hidden" id="entryId" value="" />
+
+                <!-- 1. TEACHER NAME -->
+                <div class="mb-3">
+                  <label for="teacherName" class="form-label">
+                    <i class="bi bi-person-fill text-primary me-1"></i> Teacher Name <span class="text-danger">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    id="teacherName" 
+                    class="form-control" 
+                    placeholder="e.g. Prof. Tariq Mahmood / Mr. Shahid Ali"
+                    list="teachersDatalist"
+                    required
+                  />
+                  <datalist id="teachersDatalist">
+                    <option value="Mr. Muhammad Tariq">
+                    <option value="Mr. Shahid Ali">
+                    <option value="Mr. Kamran Khan">
+                    <option value="Dr. Muhammad Imran">
+                    <option value="Mr. Abdul Rehman">
+                    <option value="Mr. Naveed Akhtar">
+                    <option value="Mr. Zahid Hussain">
+                    <option value="Mr. Asim Qureshi">
+                    <option value="Mr. Bilal Ahmed">
+                    <option value="Mr. Salman Raza">
+                    <option value="Prof. Ihsan Ul Haq">
+                    <option value="Mr. Rizwan Shah">
+                    <option value="Mr. Waqas Farooq">
+                    <option value="Mr. Kashif Mehmood">
+                    <option value="Mr. Usman Ghani">
+                    <option value="Mr. Hammad Butt">
+                  </datalist>
+                  <small class="text-muted" style="font-size: 0.78rem;">Class Incharge or Teacher entering student records.</small>
+                </div>
+
+                <!-- 2. CLASS & 3. SECTION (Two Columns) -->
+                <div class="row g-3 mb-3">
+                  
+                  <!-- Class Field -->
+                  <div class="col-sm-6">
+                    <label for="classSelect" class="form-label">
+                      <i class="bi bi-mortarboard-fill text-primary me-1"></i> Class <span class="text-danger">*</span>
+                    </label>
+                    <select id="classSelect" class="form-select" required onchange="handleClassChange()">
+                      <option value="" disabled selected>-- Select Class --</option>
+                      <option value="Class 6">Class 6 (VI)</option>
+                      <option value="Class 7">Class 7 (VII)</option>
+                      <option value="Class 8">Class 8 (VIII)</option>
+                      <option value="Class 9">Class 9 (IX - Matric I)</option>
+                      <option value="Class 10">Class 10 (X - Matric II)</option>
+                      <option value="1st Year">1st Year (XI - Inter I)</option>
+                      <option value="2nd Year">2nd Year (XII - Inter II)</option>
+                    </select>
+                  </div>
+
+                  <!-- Section Field -->
+                  <div class="col-sm-6">
+                    <label for="sectionSelect" class="form-label">
+                      <i class="bi bi-grid-3x3-gap-fill text-primary me-1"></i> Section <span class="text-danger">*</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      id="sectionSelect" 
+                      class="form-control" 
+                      placeholder="e.g. Section A / Pre-Medical" 
+                      list="sectionSuggestions" 
+                      required
+                    />
+                    <datalist id="sectionSuggestions">
+                      <option value="Section A">
+                      <option value="Section B">
+                      <option value="Section C">
+                      <option value="Section D">
+                      <option value="Pre-Medical">
+                      <option value="Pre-Engineering">
+                      <option value="ICS">
+                      <option value="General Science">
+                      <option value="I.Com">
+                      <option value="Humanities / FA">
+                    </datalist>
+                  </div>
+
+                </div>
+
+                <!-- 4. TOTAL STUDENTS & 5. DATA ENTERED (Two Columns) -->
+                <div class="row g-3 mb-3">
+                  
+                  <!-- Total Students -->
+                  <div class="col-sm-6">
+                    <label for="totalStudents" class="form-label">
+                      <i class="bi bi-people-fill text-primary me-1"></i> Total Students <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                      <input 
+                        type="number" 
+                        id="totalStudents" 
+                        class="form-control" 
+                        placeholder="e.g. 45" 
+                        min="1" 
+                        max="200" 
+                        required
+                        oninput="updateCalculationPreview()"
+                      />
+                      <span class="input-group-text bg-light text-muted"><i class="bi bi-person"></i></span>
+                    </div>
+                    <small class="text-muted" style="font-size: 0.76rem;">Total enrollment in section.</small>
+                  </div>
+
+                  <!-- Data Entered -->
+                  <div class="col-sm-6">
+                    <label for="dataEntered" class="form-label">
+                      <i class="bi bi-check2-circle text-success me-1"></i> Data Entered <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                      <input 
+                        type="number" 
+                        id="dataEntered" 
+                        class="form-control" 
+                        placeholder="e.g. 42" 
+                        min="0" 
+                        required
+                        oninput="updateCalculationPreview()"
+                      />
+                      <span class="input-group-text bg-light text-muted"><i class="bi bi-check-all"></i></span>
+                    </div>
+                    <small class="text-muted" style="font-size: 0.76rem;">Entered in FEMIS portal so far.</small>
+                  </div>
+
+                </div>
+
+                <!-- LIVE PROGRESS PREVIEW BOX -->
+                <div class="preview-meter-card mb-3">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="small fw-semibold text-secondary">
+                      <i class="bi bi-speedometer2 me-1"></i> Live Entry Progress:
+                    </span>
+                    <span id="previewStatusBadge" class="status-pill status-pending">
+                      <i class="bi bi-hourglass-split"></i> Pending
+                    </span>
+                  </div>
+
+                  <div class="progress-bar-custom">
+                    <div id="previewProgressFill" class="progress-fill"></div>
+                  </div>
+
+                  <div class="d-flex justify-content-between align-items-center small text-muted mt-2">
+                    <span>
+                      Entered: <strong id="previewEnteredCount" class="text-dark">0</strong> / <span id="previewTotalCount">0</span>
+                    </span>
+                    <span>
+                      Remaining: <strong id="previewRemainingCount" class="text-danger">0</strong>
+                    </span>
+                    <span>
+                      Rate: <strong id="previewPercent" class="text-primary">0%</strong>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- 6. REMARKS -->
+                <div class="mb-3">
+                  <label for="remarksText" class="form-label d-flex justify-content-between">
+                    <span><i class="bi bi-chat-left-text-fill text-primary me-1"></i> Remarks</span>
+                    <span class="text-muted small fw-normal">Optional notes</span>
+                  </label>
+                  <textarea 
+                    id="remarksText" 
+                    rows="2" 
+                    class="form-control" 
+                    placeholder="e.g. Completed all entries. Awaiting 4 B-Forms from parents for remaining."
+                  ></textarea>
+                  
+                  <!-- Quick Remarks Suggestion Chips -->
+                  <div class="mt-2">
+                    <span class="text-muted small me-1">Quick Tags:</span>
+                    <button type="button" class="chip-btn" onclick="appendRemark('100% Data verified & completed.')">100% Completed</button>
+                    <button type="button" class="chip-btn" onclick="appendRemark('Pending NADRA B-Form copies from parents.')">Pending B-Forms</button>
+                    <button type="button" class="chip-btn" onclick="appendRemark('Under verification with Admission Register.')">Under Verification</button>
+                    <button type="button" class="chip-btn" onclick="appendRemark('Photographs and CNIC awaited.')">Photos Pending</button>
+                  </div>
+                </div>
+
+                <!-- SUBMISSION BUTTONS -->
+                <div class="d-flex gap-2 pt-2">
+                  <button type="submit" id="btnSubmitForm" class="btn btn-navy flex-grow-1 d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-cloud-arrow-up-fill"></i> Save Tracking Record
+                  </button>
+                  <button type="button" id="btnCancelEdit" class="btn btn-outline-danger d-none" onclick="cancelEditing()">
+                    Cancel
+                  </button>
+                </div>
+
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- RIGHT COLUMN: CURRENT DATA & QUICK STATS   -->
+        <!-- ========================================== -->
+        <div class="col-lg-6 col-xl-7">
+          
+          <!-- Quick Stat Tiles -->
+          <div class="row g-3 mb-3">
+            
+            <div class="col-sm-4">
+              <div class="bg-white p-3 rounded-4 border shadow-sm h-100">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="small text-muted fw-semibold">Total Students</span>
+                  <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-circle" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-people"></i>
+                  </div>
+                </div>
+                <div class="h3 fw-bold text-navy mb-0" id="statTotalStudents">0</div>
+                <small class="text-muted">Enrolled in college</small>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <div class="bg-white p-3 rounded-4 border shadow-sm h-100">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="small text-muted fw-semibold">Data Entered</span>
+                  <div class="bg-success bg-opacity-10 text-success p-2 rounded-circle" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-check-circle"></i>
+                  </div>
+                </div>
+                <div class="h3 fw-bold text-success mb-0" id="statDataEntered">0</div>
+                <small class="text-muted" id="statCompletionRateBadge">0% completion</small>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <div class="bg-white p-3 rounded-4 border shadow-sm h-100">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="small text-muted fw-semibold">Pending Entries</span>
+                  <div class="bg-danger bg-opacity-10 text-danger p-2 rounded-circle" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-clock-history"></i>
+                  </div>
+                </div>
+                <div class="h3 fw-bold text-danger mb-0" id="statPendingEntries">0</div>
+                <small class="text-muted">Awaiting input</small>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Entries Table Card -->
+          <div class="custom-card">
+            
+            <div class="card-header-styled">
+              <div>
+                <h2 class="mb-0">Entered FEMIS Records (<span id="recordCountBadge">0</span>)</h2>
+                <small class="text-muted">Live synchronization with Local Database & Infographics</small>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="femis-infographics.html" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
+                  <i class="bi bi-bar-chart-fill"></i> View Infographics
+                </a>
+                <button type="button" class="btn btn-sm btn-outline-success" onclick="exportDataToCSV()" title="Export CSV for Excel">
+                  <i class="bi bi-file-earmark-spreadsheet"></i> CSV
+                </button>
+              </div>
+            </div>
+
+            <!-- Table Filter Toolbar -->
+            <div class="p-3 bg-light border-bottom d-flex gap-2 flex-wrap align-items-center">
+              <div class="flex-grow-1" style="min-width: 180px;">
+                <input 
+                  type="text" 
+                  id="tableSearchInput" 
+                  class="form-control form-control-sm" 
+                  placeholder="Search by Teacher, Class, Section..." 
+                  oninput="renderEntriesTable()"
+                />
+              </div>
+              <div style="min-width: 140px;">
+                <select id="tableClassFilter" class="form-select form-select-sm" onchange="renderEntriesTable()">
+                  <option value="ALL">All Classes</option>
+                  <option value="Class 6">Class 6</option>
+                  <option value="Class 7">Class 7</option>
+                  <option value="Class 8">Class 8</option>
+                  <option value="Class 9">Class 9</option>
+                  <option value="Class 10">Class 10</option>
+                  <option value="1st Year">1st Year</option>
+                  <option value="2nd Year">2nd Year</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Table Content -->
+            <div class="table-responsive" style="max-height: 480px; overflow-y: auto;">
+              <table class="table table-custom align-middle">
+                <thead>
+                  <tr>
+                    <th>Class / Section</th>
+                    <th>Teacher Name</th>
+                    <th class="text-center">Total</th>
+                    <th class="text-center">Entered</th>
+                    <th class="text-center">Progress</th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="entriesTableBody">
+                  <!-- Rendered dynamically via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Table Footer -->
+            <div class="p-3 bg-light border-top d-flex justify-content-between align-items-center flex-wrap gap-2 small text-muted">
+              <div>
+                Data stored in browser and exportable to file.
+              </div>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none text-primary" onclick="loadDefaultDataset()">
+                  <i class="bi bi-arrow-repeat"></i> Reload IMCB Defaults
+                </button>
+                <span>|</span>
+                <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none text-danger" onclick="clearAllRecords()">
+                  <i class="bi bi-trash"></i> Clear All
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container-fluid px-3 px-lg-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <div>
+          © 2026 Islamabad Model College for Boys (IMCB) G-10/4, Islamabad. All rights reserved.
+        </div>
+        <div class="d-flex gap-3">
+          <a href="index.html" class="text-white-50 text-decoration-none">Home</a>
+          <span class="text-white-50">|</span>
+          <a href="teachers.html" class="text-white-50 text-decoration-none">Faculty</a>
+          <span class="text-white-50">|</span>
+          <a href="femis-infographics.html" class="text-warning text-decoration-none">Infographics & Data</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Dynamic Application Script -->
+  <script>
+    const STORAGE_KEY = 'imcb_femis_records';
+    let recordsData = [];
+
+    // Initialize application
+    window.addEventListener('DOMContentLoaded', async () => {
+      await initData();
+      renderEntriesTable();
+      updateDashboardKPIs();
+      updateCalculationPreview();
+    });
+
+    // 1. Data Initialization (LocalStorage or fallback to femis-data.json)
+    async function initData() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          recordsData = JSON.parse(stored);
+          if (Array.isArray(recordsData) && recordsData.length > 0) {
+            return;
+          }
+        } catch (e) {
+          console.error("Error reading localStorage:", e);
+        }
+      }
+
+      // If empty in localStorage, fetch femis-data.json
+      try {
+        const response = await fetch('femis-data.json');
+        if (response.ok) {
+          recordsData = await response.json();
+          saveToStorage();
+        }
+      } catch (err) {
+        console.warn("Could not fetch femis-data.json, starting with empty set:", err);
+        recordsData = [];
+      }
+    }
+
+    function saveToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(recordsData));
+      } catch (e) {
+        console.error("Storage error:", e);
+      }
+    }
+
+    // 2. Real-time Calculation & Meter Preview
+    function updateCalculationPreview() {
+      const totalInput = document.getElementById('totalStudents');
+      const enteredInput = document.getElementById('dataEntered');
+
+      const total = parseInt(totalInput.value) || 0;
+      let entered = parseInt(enteredInput.value) || 0;
+
+      // Validation safeguard
+      if (entered < 0) {
+        entered = 0;
+        enteredInput.value = 0;
+      }
+      if (total > 0 && entered > total) {
+        entered = total;
+        enteredInput.value = total;
+      }
+
+      const remaining = Math.max(0, total - entered);
+      const percentage = total > 0 ? Math.round((entered / total) * 100) : 0;
+
+      // Update counters
+      document.getElementById('previewTotalCount').textContent = total;
+      document.getElementById('previewEnteredCount').textContent = entered;
+      document.getElementById('previewRemainingCount').textContent = remaining;
+      document.getElementById('previewPercent').textContent = percentage + '%';
+
+      // Update progress bar
+      const fill = document.getElementById('previewProgressFill');
+      fill.style.width = percentage + '%';
+
+      // Update badge
+      const badge = document.getElementById('previewStatusBadge');
+      if (percentage === 100 && total > 0) {
+        badge.className = 'status-pill status-completed';
+        badge.innerHTML = '<i class="bi bi-check-circle-fill"></i> Completed';
+        fill.style.background = 'linear-gradient(90deg, #10b981, #059669)';
+      } else if (percentage > 0) {
+        badge.className = 'status-pill status-in-progress';
+        badge.innerHTML = '<i class="bi bi-arrow-repeat"></i> In Progress';
+        fill.style.background = 'linear-gradient(90deg, #3b82f6, #f59e0b)';
+      } else {
+        badge.className = 'status-pill status-pending';
+        badge.innerHTML = '<i class="bi bi-hourglass-split"></i> Pending';
+        fill.style.background = '#ef4444';
+      }
+    }
+
+    // Quick remarks injection
+    function appendRemark(text) {
+      const area = document.getElementById('remarksText');
+      if (area.value.trim() === '') {
+        area.value = text;
+      } else {
+        area.value = area.value.trim() + ' ' + text;
+      }
+      area.focus();
+    }
+
+    // Adapt sections suggestion based on class
+    function handleClassChange() {
+      const c = document.getElementById('classSelect').value;
+      const datalist = document.getElementById('sectionSuggestions');
+      if (c === '1st Year' || c === '2nd Year') {
+        datalist.innerHTML = `
+          <option value="Pre-Medical">
+          <option value="Pre-Engineering">
+          <option value="ICS">
+          <option value="General Science">
+          <option value="I.Com">
+          <option value="Humanities">
+        `;
+      } else {
+        datalist.innerHTML = `
+          <option value="Section A">
+          <option value="Section B">
+          <option value="Section C">
+          <option value="Section D">
+        `;
+      }
+    }
+
+    // 3. Form Submission Handling
+    function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const id = document.getElementById('entryId').value;
+      const teacherName = document.getElementById('teacherName').value.trim();
+      const className = document.getElementById('classSelect').value;
+      const section = document.getElementById('sectionSelect').value.trim();
+      const totalStudents = parseInt(document.getElementById('totalStudents').value) || 0;
+      const dataEntered = parseInt(document.getElementById('dataEntered').value) || 0;
+      const remarks = document.getElementById('remarksText').value.trim();
+
+      if (!teacherName || !className || !section || totalStudents <= 0) {
+        showAlert('Please fill in all required fields accurately.', 'danger');
+        return;
+      }
+
+      if (dataEntered > totalStudents) {
+        showAlert('Data entered cannot exceed total students.', 'danger');
+        return;
+      }
+
+      const timestamp = new Date().toLocaleString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', hour12: true
+      });
+
+      if (id) {
+        // Edit existing
+        const index = recordsData.findIndex(r => r.id === id);
+        if (index !== -1) {
+          recordsData[index] = {
+            ...recordsData[index],
+            teacherName,
+            className,
+            section,
+            totalStudents,
+            dataEntered,
+            remarks,
+            updatedAt: timestamp
+          };
+          showAlert(`Record for <strong>${className} (${section})</strong> updated successfully!`, 'success');
+        }
+      } else {
+        // Create new
+        const newRecord = {
+          id: 'femis-' + Date.now(),
+          teacherName,
+          className,
+          section,
+          totalStudents,
+          dataEntered,
+          remarks: remarks || 'Initial record added.',
+          updatedAt: timestamp
+        };
+        recordsData.unshift(newRecord);
+        showAlert(`New tracking entry for <strong>${className} (${section})</strong> saved!`, 'success');
+      }
+
+      saveToStorage();
+      resetForm();
+      renderEntriesTable();
+      updateDashboardKPIs();
+    }
+
+    // 4. Render Table of Entries
+    function renderEntriesTable() {
+      const tbody = document.getElementById('entriesTableBody');
+      const search = (document.getElementById('tableSearchInput')?.value || '').toLowerCase().trim();
+      const filterClass = document.getElementById('tableClassFilter')?.value || 'ALL';
+
+      let filtered = recordsData.filter(r => {
+        const matchesClass = filterClass === 'ALL' || r.className === filterClass;
+        const matchesSearch = !search ||
+          (r.teacherName && r.teacherName.toLowerCase().includes(search)) ||
+          (r.className && r.className.toLowerCase().includes(search)) ||
+          (r.section && r.section.toLowerCase().includes(search)) ||
+          (r.remarks && r.remarks.toLowerCase().includes(search));
+        return matchesClass && matchesSearch;
+      });
+
+      document.getElementById('recordCountBadge').textContent = recordsData.length;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="text-center py-4 text-muted">
+              <i class="bi bi-inbox fs-3 d-block mb-1"></i>
+              No tracking records found. Add your first entry on the left!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(r => {
+        const total = r.totalStudents || 0;
+        const entered = r.dataEntered || 0;
+        const remaining = Math.max(0, total - entered);
+        const percent = total > 0 ? Math.round((entered / total) * 100) : 0;
+
+        let statusHtml = '';
+        if (percent === 100 && total > 0) {
+          statusHtml = '<span class="status-pill status-completed"><i class="bi bi-check-circle-fill"></i> Done</span>';
+        } else if (percent > 0) {
+          statusHtml = '<span class="status-pill status-in-progress"><i class="bi bi-arrow-repeat"></i> In Progress</span>';
+        } else {
+          statusHtml = '<span class="status-pill status-pending"><i class="bi bi-hourglass-split"></i> Pending</span>';
+        }
+
+        return `
+          <tr>
+            <td>
+              <div class="fw-bold text-navy">${r.className}</div>
+              <div class="small text-muted">${r.section}</div>
+            </td>
+            <td>
+              <div class="fw-semibold text-dark">${r.teacherName}</div>
+              <div class="small text-muted" style="font-size: 0.75rem;">${r.updatedAt || 'Recent'}</div>
+            </td>
+            <td class="text-center fw-bold">${total}</td>
+            <td class="text-center fw-bold text-success">${entered}</td>
+            <td style="min-width: 110px;">
+              <div class="d-flex align-items-center justify-content-between small mb-1">
+                <span class="text-muted" style="font-size: 0.72rem;">${percent}%</span>
+                <span class="text-danger small" style="font-size: 0.72rem;">-${remaining}</span>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div 
+                  class="progress-bar ${percent === 100 ? 'bg-success' : (percent > 40 ? 'bg-primary' : 'bg-warning')}" 
+                  style="width: ${percent}%;"
+                ></div>
+              </div>
+            </td>
+            <td>${statusHtml}</td>
+            <td style="max-width: 170px;">
+              <span class="d-inline-block text-truncate small text-secondary" style="max-width: 160px;" title="${r.remarks || ''}">
+                ${r.remarks || '<span class="text-muted fst-italic">No remarks</span>'}
+              </span>
+            </td>
+            <td class="text-end">
+              <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-outline-primary" onclick="editRecord('${r.id}')" title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button type="button" class="btn btn-outline-danger" onclick="deleteRecord('${r.id}')" title="Delete">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // 5. Update KPI Cards
+    function updateDashboardKPIs() {
+      let totalStudents = 0;
+      let totalEntered = 0;
+
+      recordsData.forEach(r => {
+        totalStudents += (parseInt(r.totalStudents) || 0);
+        totalEntered += (parseInt(r.dataEntered) || 0);
+      });
+
+      const pending = Math.max(0, totalStudents - totalEntered);
+      const overallRate = totalStudents > 0 ? Math.round((totalEntered / totalStudents) * 100) : 0;
+
+      document.getElementById('statTotalStudents').textContent = totalStudents.toLocaleString();
+      document.getElementById('statDataEntered').textContent = totalEntered.toLocaleString();
+      document.getElementById('statPendingEntries').textContent = pending.toLocaleString();
+      document.getElementById('statCompletionRateBadge').textContent = overallRate + '% overall completion';
+    }
+
+    // 6. Edit Record Action
+    function editRecord(id) {
+      const rec = recordsData.find(r => r.id === id);
+      if (!rec) return;
+
+      document.getElementById('entryId').value = rec.id;
+      document.getElementById('teacherName').value = rec.teacherName;
+      document.getElementById('classSelect').value = rec.className;
+      handleClassChange();
+      document.getElementById('sectionSelect').value = rec.section;
+      document.getElementById('totalStudents').value = rec.totalStudents;
+      document.getElementById('dataEntered').value = rec.dataEntered;
+      document.getElementById('remarksText').value = rec.remarks || '';
+
+      document.getElementById('formHeaderTitle').textContent = 'Edit Tracking Entry';
+      document.getElementById('btnSubmitForm').innerHTML = '<i class="bi bi-check2-circle"></i> Update Entry';
+      document.getElementById('btnCancelEdit').classList.remove('d-none');
+
+      updateCalculationPreview();
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+
+    // Cancel Editing
+    function cancelEditing() {
+      resetForm();
+    }
+
+    // Reset Form
+    function resetForm() {
+      document.getElementById('femisEntryForm').reset();
+      document.getElementById('entryId').value = '';
+      document.getElementById('formHeaderTitle').textContent = 'New Student Tracking Entry';
+      document.getElementById('btnSubmitForm').innerHTML = '<i class="bi bi-cloud-arrow-up-fill"></i> Save Tracking Record';
+      document.getElementById('btnCancelEdit').classList.add('d-none');
+      updateCalculationPreview();
+    }
+
+    // 7. Delete Record Action
+    function deleteRecord(id) {
+      const rec = recordsData.find(r => r.id === id);
+      const title = rec ? `${rec.className} (${rec.section})` : 'this record';
+      if (confirm(`Are you sure you want to delete tracking entry for ${title}?`)) {
+        recordsData = recordsData.filter(r => r.id !== id);
+        saveToStorage();
+        renderEntriesTable();
+        updateDashboardKPIs();
+        showAlert('Record removed successfully.', 'info');
+      }
+    }
+
+    // 8. Reload Default Dataset
+    async function loadDefaultDataset() {
+      if (confirm("Reset current entries and reload official IMCB-G10/4 default dataset?")) {
+        try {
+          const res = await fetch('femis-data.json');
+          if (res.ok) {
+            recordsData = await res.json();
+            saveToStorage();
+            renderEntriesTable();
+            updateDashboardKPIs();
+            showAlert('Default IMCB-G10/4 records loaded successfully!', 'success');
+          }
+        } catch (e) {
+          showAlert('Failed to load femis-data.json: ' + e.message, 'danger');
+        }
+      }
+    }
+
+    // 9. Clear All
+    function clearAllRecords() {
+      if (confirm("Are you sure you want to remove ALL records? This cannot be undone.")) {
+        recordsData = [];
+        saveToStorage();
+        renderEntriesTable();
+        updateDashboardKPIs();
+        showAlert('All records have been cleared.', 'warning');
+      }
+    }
+
+    // 10. Export to CSV
+    function exportDataToCSV() {
+      if (recordsData.length === 0) {
+        alert("No records to export.");
+        return;
+      }
+      let csv = "ID,Teacher Name,Class,Section,Total Students,Data Entered,Remaining Students,Completion %,Status,Remarks,Last Updated\n";
+      recordsData.forEach(r => {
+        const total = r.totalStudents || 0;
+        const entered = r.dataEntered || 0;
+        const remaining = Math.max(0, total - entered);
+        const percent = total > 0 ? Math.round((entered / total) * 100) : 0;
+        const status = percent === 100 ? 'Completed' : (percent > 0 ? 'In Progress' : 'Pending');
+        
+        const cleanRemarks = (r.remarks || '').replace(/"/g, '""');
+        const cleanTeacher = (r.teacherName || '').replace(/"/g, '""');
+        
+        csv += `"${r.id}","${cleanTeacher}","${r.className}","${r.section}",${total},${entered},${remaining},"${percent}%","${status}","${cleanRemarks}","${r.updatedAt || ''}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `IMCB_G10_4_FEMIS_Tracking_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Toast Alert Helper
+    function showAlert(msg, type = 'success') {
+      const el = document.getElementById('toastAlert');
+      el.className = `alert alert-${type} shadow-sm rounded-4 border-0 mb-4 fade show`;
+      el.innerHTML = `
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-${type === 'success' ? 'check-circle-fill' : (type === 'danger' ? 'exclamation-triangle-fill' : 'info-circle-fill')} fs-5"></i>
+            <div>${msg}</div>
+          </div>
+          <button type="button" class="btn-close" onclick="document.getElementById('toastAlert').classList.add('d-none')"></button>
+        </div>
+      `;
+      el.classList.remove('d-none');
+      window.scrollTo({ top: 180, behavior: 'smooth' });
+
+      setTimeout(() => {
+        el.classList.add('d-none');
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

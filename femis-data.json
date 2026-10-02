@@ -1,0 +1,162 @@
+[
+  {
+    "id": "femis-101",
+    "teacherName": "Mr. Muhammad Tariq",
+    "className": "Class 6",
+    "section": "Section A",
+    "totalStudents": 42,
+    "dataEntered": 42,
+    "remarks": "Completed, all NADRA B-forms verified.",
+    "updatedAt": "2026-10-01 10:30 AM"
+  },
+  {
+    "id": "femis-102",
+    "teacherName": "Mr. Shahid Ali",
+    "className": "Class 6",
+    "section": "Section B",
+    "totalStudents": 40,
+    "dataEntered": 35,
+    "remarks": "5 students pending guardian CNIC copies.",
+    "updatedAt": "2026-10-01 11:15 AM"
+  },
+  {
+    "id": "femis-103",
+    "teacherName": "Mr. Kamran Khan",
+    "className": "Class 7",
+    "section": "Section A",
+    "totalStudents": 45,
+    "dataEntered": 45,
+    "remarks": "100% verified with admission ledger.",
+    "updatedAt": "2026-10-01 12:00 PM"
+  },
+  {
+    "id": "femis-104",
+    "teacherName": "Dr. Muhammad Imran",
+    "className": "Class 7",
+    "section": "Section B",
+    "totalStudents": 43,
+    "dataEntered": 30,
+    "remarks": "In progress, 13 forms under entry.",
+    "updatedAt": "2026-10-01 01:45 PM"
+  },
+  {
+    "id": "femis-105",
+    "teacherName": "Mr. Abdul Rehman",
+    "className": "Class 8",
+    "section": "Section A",
+    "totalStudents": 48,
+    "dataEntered": 48,
+    "remarks": "Completed successfully and cross-checked.",
+    "updatedAt": "2026-10-01 02:30 PM"
+  },
+  {
+    "id": "femis-106",
+    "teacherName": "Mr. Naveed Akhtar",
+    "className": "Class 8",
+    "section": "Section B",
+    "totalStudents": 46,
+    "dataEntered": 38,
+    "remarks": "8 student photographs and B-forms pending.",
+    "updatedAt": "2026-10-02 09:15 AM"
+  },
+  {
+    "id": "femis-107",
+    "teacherName": "Mr. Zahid Hussain",
+    "className": "Class 9",
+    "section": "Section A",
+    "totalStudents": 50,
+    "dataEntered": 50,
+    "remarks": "Federal Board registration cross-checked.",
+    "updatedAt": "2026-10-02 09:45 AM"
+  },
+  {
+    "id": "femis-108",
+    "teacherName": "Mr. Asim Qureshi",
+    "className": "Class 9",
+    "section": "Section B",
+    "totalStudents": 48,
+    "dataEntered": 36,
+    "remarks": "Awaiting 12 B-Forms from new admissions.",
+    "updatedAt": "2026-10-02 10:20 AM"
+  },
+  {
+    "id": "femis-109",
+    "teacherName": "Mr. Bilal Ahmed",
+    "className": "Class 10",
+    "section": "Section A",
+    "totalStudents": 52,
+    "dataEntered": 52,
+    "remarks": "Completed, verified with FBISE record.",
+    "updatedAt": "2026-10-02 10:50 AM"
+  },
+  {
+    "id": "femis-110",
+    "teacherName": "Mr. Salman Raza",
+    "className": "Class 10",
+    "section": "Section B",
+    "totalStudents": 50,
+    "dataEntered": 44,
+    "remarks": "6 students pending father CNIC updates.",
+    "updatedAt": "2026-10-02 11:10 AM"
+  },
+  {
+    "id": "femis-111",
+    "teacherName": "Prof. Ihsan Ul Haq",
+    "className": "1st Year",
+    "section": "Pre-Medical",
+    "totalStudents": 55,
+    "dataEntered": 55,
+    "remarks": "All student files completed and locked.",
+    "updatedAt": "2026-10-02 11:35 AM"
+  },
+  {
+    "id": "femis-112",
+    "teacherName": "Mr. Rizwan Shah",
+    "className": "1st Year",
+    "section": "Pre-Engineering",
+    "totalStudents": 54,
+    "dataEntered": 41,
+    "remarks": "13 awaiting domicile verification.",
+    "updatedAt": "2026-10-02 12:00 PM"
+  },
+  {
+    "id": "femis-113",
+    "teacherName": "Mr. Waqas Farooq",
+    "className": "1st Year",
+    "section": "ICS",
+    "totalStudents": 50,
+    "dataEntered": 50,
+    "remarks": "100% completed and cross-checked.",
+    "updatedAt": "2026-10-02 12:15 PM"
+  },
+  {
+    "id": "femis-114",
+    "teacherName": "Mr. Kashif Mehmood",
+    "className": "2nd Year",
+    "section": "Pre-Medical",
+    "totalStudents": 48,
+    "dataEntered": 48,
+    "remarks": "Completed and finalized for board submission.",
+    "updatedAt": "2026-10-02 12:25 PM"
+  },
+  {
+    "id": "femis-115",
+    "teacherName": "Mr. Usman Ghani",
+    "className": "2nd Year",
+    "section": "Pre-Engineering",
+    "totalStudents": 45,
+    "dataEntered": 45,
+    "remarks": "Completed, all verification tags added.",
+    "updatedAt": "2026-10-02 12:30 PM"
+  },
+  {
+    "id": "femis-116",
+    "teacherName": "Mr. Hammad Butt",
+    "className": "2nd Year",
+    "section": "ICS",
+    "totalStudents": 46,
+    "dataEntered": 39,
+    "remarks": "7 pending final roll number slips.",
+    "updatedAt": "2026-10-02 12:40 PM"
+  }
+]

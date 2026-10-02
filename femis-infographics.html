@@ -812,22 +812,22 @@
       return '';
     }
 
-    function updateCloudStatus(connected, count) {
+    function updateCloudStatus(status, extra) {
       const banner = document.getElementById('cloudSyncBanner');
       const text = document.getElementById('cloudSyncText');
       if (!banner || !text) return;
-      if (connected) {
+      if (status === 'connected') {
         banner.className = 'd-inline-flex align-items-center gap-2 mt-2 px-3 py-1 rounded-pill bg-success bg-opacity-75 text-white small';
-        text.innerHTML = '<i class="bi bi-cloud-check-fill text-white"></i> <span>Live Cloud Synced (Google Sheets) — <strong>' + (count || recordsData.length) + ' Records</strong></span>';
+        text.innerHTML = '<i class="bi bi-cloud-check-fill text-white"></i> <span>Live Cloud Synced (Google Sheets) — <strong>' + (extra || recordsData.length) + ' Records</strong></span>';
+      } else if (status === 'connecting') {
+        banner.className = 'd-inline-flex align-items-center gap-2 mt-2 px-3 py-1 rounded-pill bg-warning text-dark small';
+        text.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> <span>Connecting to Central Cloud Database...</span>';
+      } else if (status === 'permission_error') {
+        banner.className = 'd-inline-flex align-items-center gap-2 mt-2 px-3 py-1 rounded-pill bg-danger text-white small';
+        text.innerHTML = '<i class="bi bi-shield-lock-fill text-warning"></i> <span>Google Access Blocked: In Apps Script Deploy, set "Who has access" to "Anyone"</span>';
       } else {
-        const url = getCloudApiUrl();
-        if (url) {
-          banner.className = 'd-inline-flex align-items-center gap-2 mt-2 px-3 py-1 rounded-pill bg-warning text-dark small';
-          text.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> <span>Connecting to Central Cloud Database...</span>';
-        } else {
-          banner.className = 'd-inline-flex align-items-center gap-2 mt-2 px-3 py-1 rounded-pill bg-white bg-opacity-20 text-white small';
-          text.innerHTML = '<i class="bi bi-cloud-arrow-up-fill text-warning"></i> <span>Central Cloud Sync Ready (See config.js to connect Google Sheets)</span>';
-        }
+        banner.className = 'd-inline-flex align-items-center gap-2 mt-2 px-3 py-1 rounded-pill bg-white bg-opacity-20 text-white small';
+        text.innerHTML = '<i class="bi bi-cloud-arrow-up-fill text-warning"></i> <span>Central Cloud Sync Ready</span>';
       }
     }
 
@@ -849,10 +849,10 @@
     async function syncFromCloud() {
       const url = getCloudApiUrl();
       if (!url) {
-        updateCloudStatus(false);
+        updateCloudStatus('idle');
         return;
       }
-      updateCloudStatus(false);
+      updateCloudStatus('connecting');
       try {
         const fetchUrl = url + (url.includes('?') ? '&' : '?') + '_nocache=' + Date.now();
         const res = await fetch(fetchUrl, { method: 'GET', cache: 'no-store' });
@@ -862,11 +862,14 @@
             recordsData = cloudRecords;
             saveToStorage();
             refreshAllViews();
-            updateCloudStatus(true, cloudRecords.length);
+            updateCloudStatus('connected', cloudRecords.length);
+            return;
           }
         }
+        updateCloudStatus('permission_error');
       } catch (err) {
         console.warn('Google Sheets cloud fetch notice:', err);
+        updateCloudStatus('permission_error');
       }
     }
 

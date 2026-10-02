@@ -162,7 +162,20 @@ function jsonResponse(obj) {
 }
 
 function getOrCreateFemisSheet() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let ss = null;
+  try {
+    ss = SpreadsheetApp.getActiveSpreadsheet();
+  } catch (e) {}
+
+  if (!ss) {
+    const files = DriveApp.getFilesByName("IMCB_FEMIS_Database");
+    if (files.hasNext()) {
+      ss = SpreadsheetApp.open(files.next());
+    } else {
+      ss = SpreadsheetApp.create("IMCB_FEMIS_Database");
+    }
+  }
+
   let sheet = ss.getSheetByName(FEMIS_SHEET_NAME);
   
   if (!sheet) {

@@ -168,11 +168,18 @@ function getOrCreateFemisSheet() {
   } catch (e) {}
 
   if (!ss) {
-    const files = DriveApp.getFilesByName("IMCB_FEMIS_Database");
-    if (files.hasNext()) {
-      ss = SpreadsheetApp.open(files.next());
-    } else {
+    const props = PropertiesService.getScriptProperties();
+    const savedId = props.getProperty("FEMIS_SPREADSHEET_ID");
+    if (savedId) {
+      try {
+        ss = SpreadsheetApp.openById(savedId);
+      } catch (e) {
+        ss = null;
+      }
+    }
+    if (!ss) {
       ss = SpreadsheetApp.create("IMCB_FEMIS_Database");
+      props.setProperty("FEMIS_SPREADSHEET_ID", ss.getId());
     }
   }
 

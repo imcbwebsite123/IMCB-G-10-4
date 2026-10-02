@@ -353,9 +353,14 @@
             <i class="bi bi-laptop-fill text-warning"></i> Online Portal Session 2026–27
           </div>
           <h1 class="hero-title mb-1">IMCB-G10/4 FEMIS Student Entry Tracking</h1>
-          <p class="hero-subtitle mb-0">
+          <p class="hero-subtitle mb-2">
             Submit, monitor, and update class-wise student enrollment bio-data entered into the Ministry FEMIS portal.
           </p>
+          <!-- Cloud Sync Status Badge -->
+          <div id="cloudSyncBanner" class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-20 text-white small">
+            <i class="bi bi-cloud-arrow-up-fill text-warning"></i>
+            <span id="cloudSyncText">Central Cloud Sync: Ready (Connect Google Sheet for Instant Multi-Device Sync)</span>
+          </div>
         </div>
         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
           <a href="femis-infographics.html" class="btn btn-warning fw-bold text-dark px-3 py-2 shadow-sm d-inline-flex align-items-center gap-2">
@@ -775,10 +780,79 @@
   <!-- Bootstrap 5 Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+  <!-- Central Cloud Database Configuration -->
+  <script src="config.js"></script>
+
   <!-- Dynamic Application Script -->
   <script>
     const STORAGE_KEY = 'imcb_femis_records_v4';
     let recordsData = [];
+
+    function getCloudApiUrl() {
+      if (typeof FEMIS_CLOUD_API_URL !== 'undefined' && FEMIS_CLOUD_API_URL && FEMIS_CLOUD_API_URL.trim() !== '') {
+        return FEMIS_CLOUD_API_URL.trim();
+      }
+      return '';
+    }
+
+    function updateCloudStatus(connected, count) {
+      const banner = document.getElementById('cloudSyncBanner');
+      const text = document.getElementById('cloudSyncText');
+      if (!banner || !text) return;
+      if (connected) {
+        banner.className = 'd-inline-flex align-items-center gap-2 mt-2 px-3 py-1 rounded-pill bg-success bg-opacity-75 text-white small';
+        text.innerHTML = '<i class="bi bi-cloud-check-fill text-white"></i> <span>Live Cloud Synced (Google Sheets) — <strong>' + (count || recordsData.length) + ' Records</strong></span>';
+      } else {
+        const url = getCloudApiUrl();
+        if (url) {
+          banner.className = 'd-inline-flex align-items-center gap-2 mt-2 px-3 py-1 rounded-pill bg-warning text-dark small';
+          text.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> <span>Connecting to Central Cloud Database...</span>';
+        } else {
+          banner.className = 'd-inline-flex align-items-center gap-2 mt-2 px-3 py-1 rounded-pill bg-white bg-opacity-20 text-white small';
+          text.innerHTML = '<i class="bi bi-cloud-arrow-up-fill text-warning"></i> <span>Central Cloud Sync Ready (See config.js to connect Google Sheets)</span>';
+        }
+      }
+    }
+
+    // Push changes to Central Cloud Database in real-time
+    async function pushToCloud(record) {
+      const url = getCloudApiUrl();
+      if (!url || !record) return;
+      try {
+        fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(record)
+        }).catch(err => console.warn('Cloud sync background error:', err));
+      } catch (e) {}
+    }
+
+    // Sync latest changes from Central Cloud Database
+    async function syncFromCloud() {
+      const url = getCloudApiUrl();
+      if (!url) {
+        updateCloudStatus(false);
+        return;
+      }
+      updateCloudStatus(false);
+      try {
+        const fetchUrl = url + (url.includes('?') ? '&' : '?') + '_nocache=' + Date.now();
+        const res = await fetch(fetchUrl, { method: 'GET', cache: 'no-store' });
+        if (res.ok) {
+          const cloudRecords = await res.json();
+          if (Array.isArray(cloudRecords) && cloudRecords.length > 0) {
+            recordsData = cloudRecords;
+            saveToStorage();
+            renderEntriesTable();
+            updateDashboardKPIs();
+            updateCloudStatus(true, cloudRecords.length);
+          }
+        }
+      } catch (err) {
+        console.warn('Google Sheets cloud fetch notice:', err);
+      }
+    }
 
     // Initialize application
     window.addEventListener('DOMContentLoaded', async () => {
@@ -786,6 +860,7 @@
       renderEntriesTable();
       updateDashboardKPIs();
       updateCalculationPreview();
+      syncFromCloud();
     });
 
     // 1. Data Initialization (LocalStorage or fallback to femis-data.json)
@@ -955,7 +1030,9 @@
         showAlert(`New tracking entry for <strong>${className} (${section})</strong> saved!`, 'success');
       }
 
+      const savedRecord = id ? recordsData.find(r => r.id === id) : recordsData[0];
       saveToStorage();
+      pushToCloud(savedRecord);
       resetForm();
       renderEntriesTable();
       updateDashboardKPIs();

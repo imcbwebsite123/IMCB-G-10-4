@@ -415,22 +415,45 @@
                     required
                   />
                   <datalist id="teachersDatalist">
-                    <option value="Mr. Muhammad Tariq">
-                    <option value="Mr. Shahid Ali">
-                    <option value="Mr. Kamran Khan">
-                    <option value="Dr. Muhammad Imran">
-                    <option value="Mr. Abdul Rehman">
-                    <option value="Mr. Naveed Akhtar">
-                    <option value="Mr. Zahid Hussain">
-                    <option value="Mr. Asim Qureshi">
-                    <option value="Mr. Bilal Ahmed">
-                    <option value="Mr. Salman Raza">
-                    <option value="Prof. Ihsan Ul Haq">
-                    <option value="Mr. Rizwan Shah">
-                    <option value="Mr. Waqas Farooq">
-                    <option value="Mr. Kashif Mehmood">
-                    <option value="Mr. Usman Ghani">
-                    <option value="Mr. Hammad Butt">
+                    <option value="Muhammad Sajid">
+                    <option value="Muhammad Waqas">
+                    <option value="Nadeem Abbas Abbas">
+                    <option value="Nawaz Nadeem">
+                    <option value="Muneeb Saleem Saleem">
+                    <option value="Zia Ud Din">
+                    <option value="Imran Siddiqui">
+                    <option value="Muhammad Ali Awan">
+                    <option value="Ahmadullah">
+                    <option value="Iftikhar Hussain Hussain">
+                    <option value="Mushtaq Hussain Shah">
+                    <option value="Muhammad Mahmood">
+                    <option value="Yasir Iqbal">
+                    <option value="Muhammad Aslam">
+                    <option value="Aftab Ahmad AHMAD">
+                    <option value="Shamim akhtar">
+                    <option value="Rahid Ali">
+                    <option value="Mamouna Yasmeen">
+                    <option value="Sobia Ijaz">
+                    <option value="Saima Awan">
+                    <option value="Durr E Shahwar">
+                    <option value="Asya Tabasum Butt">
+                    <option value="Humaira kiani">
+                    <option value="Irfan Mahmood">
+                    <option value="Saniya Sana">
+                    <option value="M.Saleem">
+                    <option value="HAFIZ AMIR SHAHZAD">
+                    <option value="Safia Ishaq">
+                    <option value="Hafiz Roohul Ameen Roohul Ameen">
+                    <option value="Kirshan">
+                    <option value="uzma khatoon">
+                    <option value="Muhammad Saleem">
+                    <option value="Chan Mehboob">
+                    <option value="Sultan Sikandar">
+                    <option value="Aziz Ullah">
+                    <option value="Jamil Hussain">
+                    <option value="Shamsuddin Qureshi">
+                    <option value="Nadeem Mehmood">
+                    <option value="Ajmal Khan">
                   </datalist>
                   <small class="text-muted" style="font-size: 0.78rem;">Class Incharge or Teacher entering student records.</small>
                 </div>
@@ -445,13 +468,13 @@
                     </label>
                     <select id="classSelect" class="form-select" required onchange="handleClassChange()">
                       <option value="" disabled selected>-- Select Class --</option>
-                      <option value="Class 6">Class 6 (VI)</option>
-                      <option value="Class 7">Class 7 (VII)</option>
-                      <option value="Class 8">Class 8 (VIII)</option>
-                      <option value="Class 9">Class 9 (IX - Matric I)</option>
-                      <option value="Class 10">Class 10 (X - Matric II)</option>
-                      <option value="1st Year">1st Year (XI - Inter I)</option>
-                      <option value="2nd Year">2nd Year (XII - Inter II)</option>
+                      <option value="6th">6th</option>
+                      <option value="7th">7th</option>
+                      <option value="8th">8th</option>
+                      <option value="9th">9th</option>
+                      <option value="10th">10th</option>
+                      <option value="11th">11th (1st Year)</option>
+                      <option value="12th">12th (2nd Year)</option>
                     </select>
                   </div>
 
@@ -464,7 +487,7 @@
                       type="text" 
                       id="sectionSelect" 
                       class="form-control" 
-                      placeholder="e.g. Section A / Pre-Medical" 
+                      placeholder="e.g. Section A / Section B" 
                       list="sectionSuggestions" 
                       required
                     />
@@ -473,12 +496,8 @@
                       <option value="Section B">
                       <option value="Section C">
                       <option value="Section D">
-                      <option value="Pre-Medical">
-                      <option value="Pre-Engineering">
-                      <option value="ICS">
-                      <option value="General Science">
-                      <option value="I.Com">
-                      <option value="Humanities / FA">
+                      <option value="Section E">
+                      <option value="Section F">
                     </datalist>
                   </div>
 
@@ -678,13 +697,13 @@
               <div style="min-width: 140px;">
                 <select id="tableClassFilter" class="form-select form-select-sm" onchange="renderEntriesTable()">
                   <option value="ALL">All Classes</option>
-                  <option value="Class 6">Class 6</option>
-                  <option value="Class 7">Class 7</option>
-                  <option value="Class 8">Class 8</option>
-                  <option value="Class 9">Class 9</option>
-                  <option value="Class 10">Class 10</option>
-                  <option value="1st Year">1st Year</option>
-                  <option value="2nd Year">2nd Year</option>
+                  <option value="6th">6th</option>
+                  <option value="7th">7th</option>
+                  <option value="8th">8th</option>
+                  <option value="9th">9th</option>
+                  <option value="10th">10th</option>
+                  <option value="11th">11th</option>
+                  <option value="12th">12th</option>
                 </select>
               </div>
             </div>
@@ -758,7 +777,7 @@
 
   <!-- Dynamic Application Script -->
   <script>
-    const STORAGE_KEY = 'imcb_femis_records';
+    const STORAGE_KEY = 'imcb_femis_records_v4';
     let recordsData = [];
 
     // Initialize application
@@ -867,23 +886,14 @@
     function handleClassChange() {
       const c = document.getElementById('classSelect').value;
       const datalist = document.getElementById('sectionSuggestions');
-      if (c === '1st Year' || c === '2nd Year') {
-        datalist.innerHTML = `
-          <option value="Pre-Medical">
-          <option value="Pre-Engineering">
-          <option value="ICS">
-          <option value="General Science">
-          <option value="I.Com">
-          <option value="Humanities">
-        `;
-      } else {
-        datalist.innerHTML = `
-          <option value="Section A">
-          <option value="Section B">
-          <option value="Section C">
-          <option value="Section D">
-        `;
-      }
+      datalist.innerHTML = `
+        <option value="Section A">
+        <option value="Section B">
+        <option value="Section C">
+        <option value="Section D">
+        <option value="Section E">
+        <option value="Section F">
+      `;
     }
 
     // 3. Form Submission Handling
